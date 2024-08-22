@@ -1,34 +1,39 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Reddy on 22/08/24.
 //
 
 import WatchConnectivity
 final class AppleWatchDetector: NSObject , WCSessionDelegate {
-    
+
     public static let shared = AppleWatchDetector()
     public weak var delegate: AlertWalletControllerDelegate?
+    private var session : WCSession? = nil
 
     private override init() {
-            super.init()
-            if WCSession.isSupported() {
-                WCSession.default.delegate = self
-                WCSession.default.activate()
-            }
+        super.init()
+        print("I am from init");
+        if WCSession.isSupported() {
+            WCSession.default.delegate = self
+            WCSession.default.activate()
+        }else{
+            self.session = nil
         }
+    }
 
 
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {
+        self.session = session
+        print("I am session");
         let  is_oaa = session.isPaired
-        print( " is paired \(is_oaa)  N ");
+        print("I am session - delegate");
         delegate?.isWatchPaired(AlertWalletController.shared, isWatchPaired: is_oaa)
-
     }
 
     func sessionDidBecomeInactive(_ session: WCSession) {
-        print("DDDD");
+
     }
 
     func sessionDidDeactivate(_ session: WCSession) {
@@ -36,15 +41,24 @@ final class AppleWatchDetector: NSObject , WCSessionDelegate {
     }
 
     public func checkIfWatchIsPaired() {
-            if WCSession.isSupported() {
-                let isPaired = WCSession.default.isPaired
-                delegate?.isWatchPaired(AlertWalletController.shared, isWatchPaired: isPaired)
-            }
+        print("I am checkIfWatchIsPaired");
+        if(self.session != nil){
+            print("I am Not  null");
+            let isPaired = self.session!.isPaired
+            delegate?.isWatchPaired(AlertWalletController.shared, isWatchPaired: isPaired)
+        }else
+        if WCSession.isSupported() {
+            print("I am   null");
+            let isPaired = WCSession.default.isPaired
+            print("I am checkIfWatchIsPaired - delegate");
+            delegate?.isWatchPaired(AlertWalletController.shared, isWatchPaired: isPaired)
         }
+
+    }
     public func sessionWatchStateDidChange(_ session: WCSession) {
-            let isPaired = session.isPaired
+        let isPaired = session.isPaired
         delegate?.isWatchPaired(AlertWalletController.shared, isWatchPaired: isPaired)
-        }
+    }
 
 }
 
