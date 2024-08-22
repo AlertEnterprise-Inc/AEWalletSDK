@@ -32,6 +32,11 @@ public class AlertWalletController: UIViewController {
     public func checkEligibility(){
         let serverURL = PropertiesManager.shared.getServerURL()
         print(" Server URL \(String(describing: serverURL))    ;;;")
+        if (serverURL != nil){
+            delegate?.isEligible(self, onEligibilityResult: true)
+        }else{
+            delegate?.isEligible(self, onEligibilityResult: false)
+        }
 
     }
 
