@@ -4,13 +4,12 @@ public class AlertWalletSDK {
 
     var watchDetector: AppleWatchDetector
 
-    public init(){
-        watchDetector = AppleWatchDetector.shared
+    public init(delegate : AlertWalletControllerDelegate){
+        AppleWatchDetector.shared.delegate = delegate
+        AppleWatchDetector.shared.initialize()
     }
 
-    public func isWatchPaired() -> Bool{
-        return watchDetector.watchPaired
-    }
+
 
 
 
