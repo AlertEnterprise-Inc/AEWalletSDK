@@ -28,7 +28,7 @@ final class AppleWatchDetector: NSObject , WCSessionDelegate {
         self.session = session
         print("I am session");
         let  is_oaa = session.isPaired
-        print("I am session - delegate");
+        print("I am session - delegate \(is_oaa)");
         delegate?.isWatchPaired(AlertWalletController.shared, isWatchPaired: is_oaa)
     }
 
@@ -66,7 +66,6 @@ final class AppleWatchDetector: NSObject , WCSessionDelegate {
     }
     public func initialize() {
         print("dummy check");
-
     }
 
 }
