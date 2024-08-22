@@ -7,12 +7,13 @@
 
 import Foundation
 import UIKit
+import PassKit
 
 public class AlertWalletController: UIViewController {
 
     public static let shared = AlertWalletController()
-
     public var delegate: AlertWalletControllerDelegate?
+
 
     private init() {
         super.init(nibName: nil, bundle: nil)
@@ -25,30 +26,33 @@ public class AlertWalletController: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         print("SDK viewDidLoad");
+
     }
 
 
     public func checkEligibility(){
         print("SDK checkEligibility called didTapButton()");
-        delegate?.didTapButton()
+
 
     }
 
-    public func isWatchPairedToPhone() -> Bool {
-        print("SDK isWatchPairedToPhone directly returning data from controller");
-        return true;
+    public func isWatchPairedToPhone() {
+        var watchDetector = AppleWatchDetector()
+        watchDetector.detect()
+        let isParied = watchDetector.watchPaired
+        delegate?.isWatchPaired(self, isWatchPaired : isParied)
     }
 
     public func startPassProvisioning(){
         print("SDK startPassProvisioning");
         let title = "GGGG"
-        delegate?.didUpdateButtonTitle(self, didTapButtonWith: title)
+
 
     }
 
     public func saveToWallet(parentViewController: UIViewController, thumbnail: String, displayName: String, description: String, saveLink: String){
         print("SDK saveToWallet");
-        delegate?.didUpdateBackgroundColor(displayName: displayName)
+
 
     }
 

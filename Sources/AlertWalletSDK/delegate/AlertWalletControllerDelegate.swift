@@ -9,8 +9,9 @@ import Foundation
 
 
 public protocol AlertWalletControllerDelegate: AnyObject {
-    func didTapButton()
-    func didUpdateButtonTitle(_ controller: AlertWalletController, didTapButtonWith message: String)
-    func didUpdateBackgroundColor(displayName: String)
-    func viewDidAppear()
+    func isEligible(_ controller: AlertWalletController, onEligibilityResult isEligible: Bool)
+    func isWatchPaired(_ controller: AlertWalletController, isWatchPaired result: Bool)
+    func provisioningPending(_ controller: AlertWalletController)
+    func provisioningSuccess(_ controller: AlertWalletController)
+    func startProvisioning(_ controller: AlertWalletController, onReady data:NSObject)
 }
