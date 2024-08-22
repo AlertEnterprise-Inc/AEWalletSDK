@@ -29,22 +29,26 @@ public class AlertWalletController: UIViewController {
 
 
     public func checkEligibility(){
-        print("SDK checkEligibility");
+        print("SDK checkEligibility called didTapButton()");
+        delegate?.didTapButton()
 
     }
 
     public func isWatchPairedToPhone() -> Bool {
-        print("SDK isWatchPairedToPhone");
+        print("SDK isWatchPairedToPhone directly returning data from controller");
         return false;
     }
 
     public func startPassProvisioning(){
         print("SDK startPassProvisioning");
+        let title = "GGGG"
+        delegate?.didUpdateButtonTitle(to: title)
 
     }
 
     public func saveToWallet(parentViewController: UIViewController, thumbnail: String, displayName: String, description: String, saveLink: String){
         print("SDK saveToWallet");
+        delegate?.didUpdateBackgroundColor(displayName: displayName)
 
     }
 
