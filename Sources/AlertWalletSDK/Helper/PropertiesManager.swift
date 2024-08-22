@@ -20,29 +20,29 @@ public class PropertiesManager {
 
     private let defaults = UserDefaults.standard
 
-    func setServerURL(serverURL: String) {
+   public func setServerURL(serverURL: String) {
         defaults.setValue(serverURL, forKey: serverUrlSuffix)
     }
 
-    func getServerURL() -> String? {
+    public func getServerURL() -> String? {
         if let serverURL = defaults.string(forKey: serverUrlSuffix) {
             return serverURL
         }
         return nil
     }
 
-    func getAccessToken() -> String? {
+    public func getAccessToken() -> String? {
         if let accessToken = defaults.string(forKey: authTokenSuffix) {
             return accessToken
         }
         return nil
     }
 
-    func setAccessToken(authToken: String) {
+    public func setAccessToken(authToken: String) {
         defaults.setValue(authToken, forKey: authTokenSuffix)
     }
 
-    func getAccessTokenExpiration()-> Double? {
+    public func getAccessTokenExpiration()-> Double? {
         let accessTokenExpiration = defaults.double(forKey: authTokenExpirationSuffix)
         if (accessTokenExpiration > 0) {
             return accessTokenExpiration
@@ -50,7 +50,7 @@ public class PropertiesManager {
         return nil
     }
 
-    func setAccessTokenExpiration(accessTokenExpiration: Double) {
+    public func setAccessTokenExpiration(accessTokenExpiration: Double) {
         defaults.setValue(accessTokenExpiration, forKey: authTokenExpirationSuffix)
     }
 
