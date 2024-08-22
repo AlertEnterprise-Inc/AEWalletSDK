@@ -72,5 +72,5 @@ final class AppleWatchDetector: NSObject , WCSessionDelegate {
         }
 
     }
-
+}
 
