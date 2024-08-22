@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Reddy on 22/08/24.
 //
@@ -10,26 +10,48 @@ import UIKit
 
 public class AlertWalletController: UIViewController {
 
-    public weak var delegate: AlertWalletControllerDelegate?
+    public static let shared = AlertWalletController()
+
+    public var delegate: AlertWalletControllerDelegate?
+
+    private init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-
-        let button = UIButton(type: .system)
-        button.setTitle("Tap me!", for: .normal)
-        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-
-        button.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(button)
-
-        NSLayoutConstraint.activate([
-            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            button.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+        print("SDK viewDidLoad");
     }
 
-    @objc private func buttonTapped() {
-        delegate?.didTapButton()
+
+    public func checkEligibility(){
+        print("SDK checkEligibility");
+
     }
+
+    public func isWatchPairedToPhone() -> Bool {
+        print("SDK isWatchPairedToPhone");
+        return false;
+    }
+
+    public func startPassProvisioning(){
+        print("SDK startPassProvisioning");
+
+    }
+
+    public func saveToWallet(parentViewController: UIViewController, thumbnail: CGImage, displayName: String, description: String, saveLink: String){
+        print("SDK saveToWallet");
+
+    }
+
+    public func syncPassToWatch(parentViewController: UIViewController, thumbnail: CGImage, displayName: String, description: String, watchProvisioningBlob: String){
+        print("SDK syncPassToWatch");
+
+    }
+
+
 }
