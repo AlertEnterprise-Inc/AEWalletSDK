@@ -27,7 +27,7 @@ public class AlertWalletController: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         print("SDK viewDidLoad");
-
+        print("<<<<");
 
     }
 
@@ -38,8 +38,14 @@ public class AlertWalletController: UIViewController {
 
     }
 
+    public func initialize() {
+        AppleWatchDetector.shared.delegate = delegate
+        AppleWatchDetector.shared.initialize()
+    }
+
     public func isWatchPairedToPhone() {
         AppleWatchDetector.shared.delegate = delegate
+        AppleWatchDetector.shared.initialize()
         AppleWatchDetector.shared.checkIfWatchIsPaired()
     }
 

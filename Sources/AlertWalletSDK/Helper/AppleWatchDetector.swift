@@ -46,20 +46,31 @@ final class AppleWatchDetector: NSObject , WCSessionDelegate {
             print("I am Not  null");
             let isPaired = self.session!.isPaired
             delegate?.isWatchPaired(AlertWalletController.shared, isWatchPaired: isPaired)
-        }else
-        if WCSession.isSupported() {
+        }else if(self.session == nil){
+            if WCSession.isSupported() {
+                WCSession.default.delegate = self
+                WCSession.default.activate()
+            }
+        }else if WCSession.isSupported() {
             print("I am   null");
             let isPaired = WCSession.default.isPaired
             print("I am checkIfWatchIsPaired - delegate");
             delegate?.isWatchPaired(AlertWalletController.shared, isWatchPaired: isPaired)
+        }else{
+            print("I am   null");
+            delegate?.isWatchPaired(AlertWalletController.shared, isWatchPaired: false)
         }
 
     }
-    public func sessionWatchStateDidChange(_ session: WCSession) {
-        let isPaired = session.isPaired
-        delegate?.isWatchPaired(AlertWalletController.shared, isWatchPaired: isPaired)
-    }
 
-}
+    public func initialize(){
+        if(self.session == nil){
+            if WCSession.isSupported() {
+                WCSession.default.delegate = self
+                WCSession.default.activate()
+            }
+        }
+
+    }
 
 
