@@ -29,6 +29,9 @@ final class AppleWatchDetector: NSObject {
 extension AppleWatchDetector: WCSessionDelegate {
 
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+
+        print("Received session session: \(session)")
+        print("Received session session.isPaired: \(session.isPaired)")
         self.watchPaired = session.isPaired
 
         switch activationState {
