@@ -26,14 +26,11 @@ final class AppleWatchDetector: NSObject , WCSessionDelegate {
 
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {
         self.session = session
-        print("I am session");
         let isPaired  = self.session!.isPaired
-        print("I am session - delegate \(isPaired)");
         delegate?.isWatchPaired(AlertWalletController.shared, isWatchPaired: isPaired)
     }
 
     func sessionDidBecomeInactive(_ session: WCSession) {
-
     }
 
     func sessionDidDeactivate(_ session: WCSession) {
@@ -50,12 +47,11 @@ final class AppleWatchDetector: NSObject , WCSessionDelegate {
                 delegate?.isWatchPaired(AlertWalletController.shared, isWatchPaired: isPaired)
             }
         }else{
-            print("I am   null");
             delegate?.isWatchPaired(AlertWalletController.shared, isWatchPaired: false)
         }
     }
     public func initialize() {
-        print("dummy check");
+        print("initializing Apple Watch detector");
     }
 
 }
