@@ -30,6 +30,9 @@ public class AlertWalletController: UIViewController {
 
 
     public func checkEligibility(){
+        let serverURL = PropertiesManager.shared.getServerURL()
+        print(" Server URL \(String(describing: serverURL))    ;;;")
+
     }
 
     public func initiateWatchDetection() {
