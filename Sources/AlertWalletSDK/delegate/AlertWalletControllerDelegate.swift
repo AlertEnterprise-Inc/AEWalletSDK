@@ -8,6 +8,6 @@
 import Foundation
 
 
-public protocol AeWalletControllerDelegate: AnyObject {
+public protocol AlertWalletControllerDelegate: AnyObject {
     func didTapButton()
 }

@@ -8,9 +8,9 @@
 import Foundation
 import UIKit
 
-public class AeWalletController: UIViewController {
+public class AlertWalletController: UIViewController {
 
-    public weak var delegate: AeWalletControllerDelegate?
+    public weak var delegate: AlertWalletControllerDelegate?
 
     override public func viewDidLoad() {
         super.viewDidLoad()
