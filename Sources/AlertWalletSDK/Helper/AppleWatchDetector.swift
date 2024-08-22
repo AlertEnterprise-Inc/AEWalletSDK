@@ -13,12 +13,15 @@ final class AppleWatchDetector: NSObject {
     var watchPaired = false
 
     func detect() {
+        print("AppleWatchDetector.detect()  ==>" )
         if(WCSession.isSupported()){
             session = WCSession.default
             session?.delegate = self
             session?.activate()
+            print("AppleWatchDetector.detect()  ==> YYYYY" )
         }else{
             print("WCSession.isSupported()   is false" )
+            print("AppleWatchDetector.detect()  ==> NNNN"  )
         }
     }
 }
@@ -27,7 +30,7 @@ extension AppleWatchDetector: WCSessionDelegate {
 
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         self.watchPaired = session.isPaired
-        /*
+
         switch activationState {
              case .activated:
                  print("WCSession activated successfully")
@@ -38,7 +41,7 @@ extension AppleWatchDetector: WCSessionDelegate {
              @unknown default:
                  print("Unexpected state received after trying to activate the WCSession")
         }
-        */
+
     }
 
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
@@ -46,8 +49,11 @@ extension AppleWatchDetector: WCSessionDelegate {
     }
 
     func sessionDidDeactivate(_ session: WCSession) {
+        print("Received sessionDidDeactivate: \(session)")
+
     }
 
     func sessionDidBecomeInactive(_ session: WCSession) {
+        print("Received sessionDidDeactivate: \(session)")
     }
 }
