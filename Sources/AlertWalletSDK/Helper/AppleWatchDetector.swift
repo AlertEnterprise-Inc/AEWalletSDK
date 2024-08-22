@@ -21,7 +21,10 @@ final class AppleWatchDetector: NSObject , WCSessionDelegate {
 
 
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {
-        print("AAAAA");
+        let  is_oaa = session.isPaired
+        print( " is paired \(is_oaa)  N ");
+        delegate?.isWatchPaired(AlertWalletController.shared, isWatchPaired: is_oaa)
+
     }
 
     func sessionDidBecomeInactive(_ session: WCSession) {
