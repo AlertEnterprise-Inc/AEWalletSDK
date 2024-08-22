@@ -40,6 +40,7 @@ public class AlertWalletController: UIViewController {
         var watchDetector = AppleWatchDetector()
         watchDetector.detect()
         let isParied = watchDetector.watchPaired
+        print("AlertWalletController  isWatchPairedToPhone :: isParied " ,isParied)
         delegate?.isWatchPaired(self, isWatchPaired : isParied)
     }
 
