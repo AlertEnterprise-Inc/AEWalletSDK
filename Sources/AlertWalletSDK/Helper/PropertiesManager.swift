@@ -30,6 +30,10 @@ public class PropertiesManager {
         }
         return nil
     }
+    public func clearServerURL() -> Bool {
+        UserDefaults.standard.removeObject(forKey: serverUrlSuffix)
+        return true
+    }
 
     public func getAccessToken() -> String? {
         if let accessToken = defaults.string(forKey: authTokenSuffix) {
@@ -42,6 +46,11 @@ public class PropertiesManager {
         defaults.setValue(authToken, forKey: authTokenSuffix)
     }
 
+    public func clearAccessToken() -> Bool {
+        UserDefaults.standard.removeObject(forKey: authTokenSuffix)
+        return true
+    }
+
     public func getAccessTokenExpiration()-> Double? {
         let accessTokenExpiration = defaults.double(forKey: authTokenExpirationSuffix)
         if (accessTokenExpiration > 0) {
@@ -52,6 +61,17 @@ public class PropertiesManager {
 
     public func setAccessTokenExpiration(accessTokenExpiration: Double) {
         defaults.setValue(accessTokenExpiration, forKey: authTokenExpirationSuffix)
+    }
+
+    public func clearccessTokenExpiration() -> Bool {
+        UserDefaults.standard.removeObject(forKey: authTokenExpirationSuffix)
+        return true
+    }
+
+    public func clearAll() -> Void {
+        _ = clearccessTokenExpiration()
+        _ = clearAccessToken()
+        _ = clearServerURL()
     }
 
 }
