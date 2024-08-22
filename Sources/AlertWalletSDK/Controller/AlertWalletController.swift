@@ -38,14 +38,7 @@ public class AlertWalletController: UIViewController {
 
     }
 
-    public func initialize() {
-        AppleWatchDetector.shared.delegate = delegate
-        AppleWatchDetector.shared.initialize()
-    }
-
     public func isWatchPairedToPhone() {
-        AppleWatchDetector.shared.delegate = delegate
-        AppleWatchDetector.shared.initialize()
         AppleWatchDetector.shared.checkIfWatchIsPaired()
     }
 
