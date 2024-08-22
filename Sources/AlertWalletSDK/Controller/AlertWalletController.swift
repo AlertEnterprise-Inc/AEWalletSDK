@@ -43,12 +43,12 @@ public class AlertWalletController: UIViewController {
 
     }
 
-    public func saveToWallet(parentViewController: UIViewController, thumbnail: CGImage, displayName: String, description: String, saveLink: String){
+    public func saveToWallet(parentViewController: UIViewController, thumbnail: String, displayName: String, description: String, saveLink: String){
         print("SDK saveToWallet");
 
     }
 
-    public func syncPassToWatch(parentViewController: UIViewController, thumbnail: CGImage, displayName: String, description: String, watchProvisioningBlob: String){
+    public func syncPassToWatch(parentViewController: UIViewController, thumbnail: String, displayName: String, description: String, watchProvisioningBlob: String){
         print("SDK syncPassToWatch");
 
     }
