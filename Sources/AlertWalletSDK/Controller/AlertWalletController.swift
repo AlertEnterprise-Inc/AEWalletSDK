@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import PassKit
+import WatchConnectivity
 
 public class AlertWalletController: UIViewController {
 
@@ -27,6 +28,7 @@ public class AlertWalletController: UIViewController {
         super.viewDidLoad()
         print("SDK viewDidLoad");
 
+
     }
 
 
@@ -37,16 +39,12 @@ public class AlertWalletController: UIViewController {
     }
 
     public func isWatchPairedToPhone() {
-        var watchDetector = AppleWatchDetector()
-        watchDetector.detect()
-        let isParied = watchDetector.watchPaired
-        print("AlertWalletController  isWatchPairedToPhone :: isParied " ,isParied)
-        delegate?.isWatchPaired(self, isWatchPaired : isParied)
+        AppleWatchDetector.shared.delegate = delegate
+        AppleWatchDetector.shared.checkIfWatchIsPaired()
     }
 
     public func startPassProvisioning(){
         print("SDK startPassProvisioning");
-        let title = "GGGG"
 
 
     }

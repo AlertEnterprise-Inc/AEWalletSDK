@@ -6,57 +6,43 @@
 //
 
 import WatchConnectivity
-final class AppleWatchDetector: NSObject {
+final class AppleWatchDetector: NSObject , WCSessionDelegate {
+    
+    public static let shared = AppleWatchDetector()
+    public weak var delegate: AlertWalletControllerDelegate?
 
-    static let shared = AppleWatchDetector()
-    var session: WCSession?  = nil
-    var watchPaired = false
-
-    func detect() {
-        print("AppleWatchDetector.detect()  ==>" )
-        if(WCSession.isSupported()){
-            session = WCSession.default
-            session?.delegate = self
-            session?.activate()
-            print("AppleWatchDetector.detect()  ==> YYYYY" )
-        }else{
-            print("WCSession.isSupported()   is false" )
-            print("AppleWatchDetector.detect()  ==> NNNN"  )
-        }
-    }
-}
-
-extension AppleWatchDetector: WCSessionDelegate {
-
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-
-        print("Received session session: \(session)")
-        print("Received session session.isPaired: \(session.isPaired)")
-        self.watchPaired = session.isPaired
-
-        switch activationState {
-             case .activated:
-                 print("WCSession activated successfully")
-             case .inactive:
-                 print("Unable to activate the WCSession. Error: \(error?.localizedDescription ?? "--")")
-             case .notActivated:
-                 print("Unexpected .notActivated state received after trying to activate the WCSession")
-             @unknown default:
-                 print("Unexpected state received after trying to activate the WCSession")
+    private override init() {
+            super.init()
+            if WCSession.isSupported() {
+                WCSession.default.delegate = self
+                WCSession.default.activate()
+            }
         }
 
-    }
 
-    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
-        print("Received application context: \(applicationContext)")
-    }
-
-    func sessionDidDeactivate(_ session: WCSession) {
-        print("Received sessionDidDeactivate: \(session)")
-
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {
+        print("AAAAA");
     }
 
     func sessionDidBecomeInactive(_ session: WCSession) {
-        print("Received sessionDidDeactivate: \(session)")
+        print("DDDD");
     }
+
+    func sessionDidDeactivate(_ session: WCSession) {
+        WCSession.default.activate()
+    }
+
+    public func checkIfWatchIsPaired() {
+            if WCSession.isSupported() {
+                let isPaired = WCSession.default.isPaired
+                delegate?.isWatchPaired(AlertWalletController.shared, isWatchPaired: isPaired)
+            }
+        }
+    public func sessionWatchStateDidChange(_ session: WCSession) {
+            let isPaired = session.isPaired
+        delegate?.isWatchPaired(AlertWalletController.shared, isWatchPaired: isPaired)
+        }
+
 }
+
+
