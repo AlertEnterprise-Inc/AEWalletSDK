@@ -36,13 +36,13 @@ public class AlertWalletController: UIViewController {
 
     public func isWatchPairedToPhone() -> Bool {
         print("SDK isWatchPairedToPhone directly returning data from controller");
-        return false;
+        return true;
     }
 
     public func startPassProvisioning(){
         print("SDK startPassProvisioning");
         let title = "GGGG"
-        delegate?.didUpdateButtonTitle(to: title)
+        delegate?.didUpdateButtonTitle(self, didTapButtonWith: title)
 
     }
 

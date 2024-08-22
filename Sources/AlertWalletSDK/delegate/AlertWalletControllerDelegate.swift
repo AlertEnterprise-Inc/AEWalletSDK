@@ -10,7 +10,7 @@ import Foundation
 
 public protocol AlertWalletControllerDelegate: AnyObject {
     func didTapButton()
-    func didUpdateButtonTitle(to title: String)
+    func didUpdateButtonTitle(_ controller: AlertWalletController, didTapButtonWith message: String)
     func didUpdateBackgroundColor(displayName: String)
     func viewDidAppear()
 }
