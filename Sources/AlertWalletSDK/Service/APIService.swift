@@ -12,20 +12,13 @@ final class APIService{
 
     static let shared = APIService()
 
-    func preparePassProvisioning(_ context: ProvisioningContext, withCompletion completion: @escaping (Result<ProvisionAPISuccessResponse,ProvisionAPIErrorResponse>) -> Void){
+    func preparePass(payloadData: ProvisioningRequestPayload, withCompletion completion: @escaping (Result<ProvisionAPISuccessResponse,ProvisionAPIErrorResponse>) -> Void){
 
-     var endpoint = ""
-        if(context.passDefinitionIdentifier != nil) {
-            endpoint = String(format: Constants.API.PROV_WITH_PASS_IDENTIFIER , PropertiesManager.shared.getServerURL()! ,context.product, context.passDefinitionIdentifier!)
-        } else {
-            endpoint = String(format: Constants.API.PROV_WITHOUT_PASS_IDENTIFIER , PropertiesManager.shared.getServerURL()! )
-        }
-        let context =  ["identityId": "2", "identityMobileCredentialId": "1"]
-        let payload = try? JSONEncoder().encode(context)
+        var endpoint =  String(format: Constants.API.PROV_WITHOUT_PASS_IDENTIFIER , PropertiesManager.shared.getServerURL()! )
+        let _payload =  ["identityId": payloadData.identityId, "identityMobileCredentialId": payloadData.identityMobileCredentialId]
+        let payload = try? JSONEncoder().encode(_payload)
         NSLog("URL for preparePassProvisioning: \(endpoint)")
-
         let header = Constants.HEADER_KEY_AUTHORIZATION_PREFIX + PropertiesManager.shared.getAccessToken()!
-
         var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = Constants.HTTP_POST
         request.addValue(Constants.HEADER_VALUE_CONTENT_TYPE_JSON, forHTTPHeaderField: Constants.HEADER_KEY_CONTENT_TYPE)
@@ -36,7 +29,6 @@ final class APIService{
         request.httpBody = payload
         request.cachePolicy = .reloadIgnoringLocalCacheData
         var isSuccess = false;
-
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let httpResponse = response as? HTTPURLResponse {
                 if(httpResponse.statusCode == 401) {
@@ -54,8 +46,6 @@ final class APIService{
                     NSLog(bodyString as String)
                     NSLog(error.debugDescription as String)
                     let decoded = try? decoder.decode(ProvisionAPIResponse.self, from: data)
-
-
                     if decoded != nil {
                         let credential = ProvisioningCredential(provisioningInformation: decoded!.data)
                         print(credential.provisioningInformation.cardTemplateIdentifier)
@@ -64,7 +54,6 @@ final class APIService{
                 }
             }
         }.resume()
-
     }
 
 }

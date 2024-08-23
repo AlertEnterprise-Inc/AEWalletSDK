@@ -44,6 +44,15 @@ public class PassManager {
         }
         return exists
     }
+
+    func canAddSePass(for passConfig: PKAddShareablePassConfiguration) -> Bool
+    {
+        let canAddSePass = PKAddSecureElementPassViewController.canAddSecureElementPass(configuration: passConfig)
+        guard canAddSePass else {
+            return false
+        }
+        return canAddSePass
+    }
 }
 
 
