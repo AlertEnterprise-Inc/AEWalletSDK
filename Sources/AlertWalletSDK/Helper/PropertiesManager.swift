@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Reddy on 22/08/24.
 //
@@ -20,7 +20,7 @@ public class PropertiesManager {
 
     private let defaults = UserDefaults.standard
 
-   public func setServerURL(serverURL: String) {
+    public func setServerURL(serverURL: String) {
         defaults.setValue(serverURL, forKey: serverUrlSuffix)
     }
 
