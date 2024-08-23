@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  AlertWalletController.swift
 //
 //
 //  Created by Reddy on 22/08/24.
@@ -31,24 +31,49 @@ public class AlertWalletController: UIViewController {
     
     public func checkEligibility(){
         let serverURL = PropertiesManager.shared.getServerURL()
-        print(" Server URL \(String(describing: serverURL))    ;;;")
         if (serverURL != nil){
             delegate?.isEligible(self, onEligibilityResult: true)
         }else{
             delegate?.isEligible(self, onEligibilityResult: false)
         }
-        
     }
-    
-    public func initiateWatchDetection() {
+
+    public func getRemotePasses() -> [PKSecureElementPass] {
+        let passManager: PassManager = PassManager()
+        return passManager.getRemoteSecureElementPasses()
+    }
+
+    public func getDevicePasses() -> [PKPass]{
+        let passManager: PassManager  = PassManager()
+        return passManager.getPasses(of: .secureElement)
+    }
+
+    public func getPass(provisioningCredentialIdentifier: String) -> PKPass? {
+        return PassManager().getPass(provisioningCredentialIdentifier: provisioningCredentialIdentifier)
+    }
+
+    public func isPassExists(provisioningCredentialIdentifier: String) -> Bool{
+        return PassManager().isPassExists(provisioningCredentialIdentifier: provisioningCredentialIdentifier)
+    }
+
+    /** response will be delegated to IsWatched function*/
+    public func isWatchPaired() {
         AppleWatchDetector.shared.delegate =  delegate
         AppleWatchDetector.shared.initialize()
     }
-    
-    public func isWatchPairedToPhone() {
-        AppleWatchDetector.shared.checkIfWatchIsPaired()
+
+
+    public func createProvisioningContext( identityId: String?, identityMobileCredentialId: String?,
+                                           product: String, credentialType: String?,
+                                           cardTemplateIdentifier: String?, passDefinitionIdentifier: String?) -> ProvisioningContext  {
+        return ProvisioningContext(identityId: identityId, identityMobileCredentialId: identityMobileCredentialId,
+                                   product: product, credentialType: credentialType,
+                                   cardTemplateIdentifier: cardTemplateIdentifier, passDefinitionIdentifier: passDefinitionIdentifier)
+
     }
-    
+
+
+
     public func startPassProvisioning(){
     }
     

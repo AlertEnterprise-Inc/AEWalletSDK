@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  AppleWatchDetector.swift
 //
 //
 //  Created by Reddy on 22/08/24.
