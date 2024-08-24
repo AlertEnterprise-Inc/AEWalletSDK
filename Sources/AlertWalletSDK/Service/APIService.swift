@@ -14,7 +14,7 @@ final class APIService{
 
     func preparePass(payloadData: ProvisioningRequestPayload, withCompletion completion: @escaping (Result<ProvisionAPISuccessResponse,ProvisionAPIErrorResponse>) -> Void){
 
-        var endpoint =  String(format: Constants.API.PROV_WITHOUT_PASS_IDENTIFIER , PropertiesManager.shared.getServerURL()! )
+        let endpoint =  String(format: Constants.API.PROV_WITHOUT_PASS_IDENTIFIER , PropertiesManager.shared.getServerURL()! )
         let _payload =  ["identityId": payloadData.identityId, "identityMobileCredentialId": payloadData.identityMobileCredentialId]
         let payload = try? JSONEncoder().encode(_payload)
         NSLog("URL for preparePassProvisioning: \(endpoint)")
@@ -28,7 +28,6 @@ final class APIService{
         request.addValue(Constants.HEADER_VALUE_NO_CACHE, forHTTPHeaderField: Constants.HEADER_KEY_CACHE_CONTROL)
         request.httpBody = payload
         request.cachePolicy = .reloadIgnoringLocalCacheData
-        var isSuccess = false;
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let httpResponse = response as? HTTPURLResponse {
                 if(httpResponse.statusCode == 401) {
