@@ -81,6 +81,7 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
         if (passes != nil ) {
             delegate?.walletprovisioningSuccess(AlertWalletController.shared, walletProvisioningSuccess: "DONE")
         }
+        controller.dismiss(animated: true)
     }
 
 
