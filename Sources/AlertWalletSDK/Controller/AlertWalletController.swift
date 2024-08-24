@@ -61,6 +61,10 @@ public class AlertWalletController: UIViewController {
         AppleWatchDetector.shared.delegate =  delegate
         AppleWatchDetector.shared.initialize()
     }
+    public func checkIfWatchPaired() {
+        AppleWatchDetector.shared.delegate =  delegate
+        AppleWatchDetector.shared.checkIfWatchIsPaired()
+    }
 
     public func startPassProvisioning(identityId: String, identityMobileCredentialId: String){
         let payload = ProvisioningRequestPayload(identityId:identityId,identityMobileCredentialId:identityMobileCredentialId)
