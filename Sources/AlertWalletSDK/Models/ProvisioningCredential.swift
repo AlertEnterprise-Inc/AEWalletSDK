@@ -8,5 +8,5 @@
 import Foundation
 
 public struct ProvisioningCredential: Codable {
-    var provisioningInformation: ProvisioningInformation
+    public var provisioningInformation: ProvisioningInformation
 }
