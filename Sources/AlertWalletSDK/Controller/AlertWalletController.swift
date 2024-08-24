@@ -45,7 +45,7 @@ public class AlertWalletController: UIViewController {
 
     public func getDevicePasses() -> [PKPass]{
         let passManager: PassManager  = PassManager()
-        return passManager.getPasses(of: .secureElement)
+        return passManager.getPasses(of: .any)
     }
 
     public func getPass(provisioningCredentialIdentifier: String) -> PKPass? {
