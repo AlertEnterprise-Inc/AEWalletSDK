@@ -89,8 +89,43 @@ func provisioningSuccess(_ controller: AlertWalletController, credentialCreateSu
 
 
 ## API Reference
-### Controller
-### Delegate
+### Controller  & Delegate
+The `AlertWalletController` class is designed to manage and present Apple Wallet passes within your application. It provides methods to add, update, and provision passes, along with delegate callbacks to handle success and error scenarios.
+`AlertWalletController` inherits from UIViewController
+
+##### Initialization
+`AlertWalletController` is a singleton object
+To access the function of `AlertWalletController`, use shared variable of the class.
+
+##### functions
+
+### `startPassProvisioning`
+
+| **Method**                 | **Description**                                                                                      | **Usage**                                                                                            | **Parameters**
+|----------------------------|------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `startPassProvisioning()`   | Starts the process of provisioning a pass to Apple Wallet.                                          | Call this method to initiate the provisioning process for the pass associated with this controller. | `identityId: String, identityMobileCredentialId: String`
+
+**Delegate Callbacks:**
+
+| **Callback Method**                                | **Description**                                                      | **Parameters**                                |
+|----------------------------------------------------|----------------------------------------------------------------------|-----------------------------------------------|
+| `credentialCreateSuccess`    | Called when the pass is successfully create a credenttial to add to wallet.    | `controller: `, `credential: ProvisioningCredential` |
+| `credentialCreateError`      | Called when an error occurs during the provisioning process.         | `_ controller: AlertWalletController`, `credentialCreateError credential: ProvisionAPIErrorResponse` |
+
+### `saveToWallet(parentViewController: UIViewController, credential: ProvisioningCredential)`
+
+| **Method**               | **Description**                                                                                     | **Returns**         |
+|--------------------------|-----------------------------------------------------------------------------------------------------|---------------------|
+| `saveToWallet(_:)`     | Simulates the process of adding a pass to Apple Wallet. This method is a placeholder.              |  success / failure in delegate response) |
+
+**Delegate Callbacks:**
+
+
+| ** Method**                          | **Description**                                             | **Parameters**                                    |
+|----------------------------------------------|-------------------------------------------------------------|---------------------------------------------------|
+| `walletprovisioningSuccess` | Called when a pass is successfully provisioned.            | `controller: AlertWalletController`, `walletProvisioningSuccess success: String`  |
+| `walletprovisioningError`   | Called when an error occurs during pass provisioning.       | `controller: AlertWalletController`, `walletProvisioningError error: String` |
+
 ## License
 **copyright reserved Alertenterprise**
 
