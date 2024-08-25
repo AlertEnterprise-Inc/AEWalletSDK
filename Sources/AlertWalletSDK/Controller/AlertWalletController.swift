@@ -31,9 +31,9 @@ public class AlertWalletController: UIViewController {
     /** response will be delegated to onEligibilityResult function*/
     public func checkEligibility(){
         if PKAddPassesViewController.canAddPasses() {
-            delegate?.AlertWalletController(self, onEligibilityResult: true)
+            delegate?.AlertWalletUIViewController(self, onEligibilityResult: true)
         } else {
-            delegate?.AlertWalletController(self, onEligibilityResult: false)
+            delegate?.AlertWalletUIViewController(self, onEligibilityResult: false)
         }
     }
 
@@ -71,9 +71,9 @@ public class AlertWalletController: UIViewController {
             switch result{
             case .success (let data) :
                 let credential : ProvisioningCredential  = data.credential!
-                self.delegate?.AlertWalletController(self, onProvisioningSuccess: credential)
+                self.delegate?.AlertWalletUIViewController(self, onProvisioningSuccess: credential)
             case .failure(let error):
-                self.delegate?.AlertWalletController(self, onProvisioningError: error)
+                self.delegate?.AlertWalletUIViewController(self, onProvisioningError: error)
             }
         }
     }

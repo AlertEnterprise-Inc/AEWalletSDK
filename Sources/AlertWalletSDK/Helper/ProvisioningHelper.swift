@@ -76,10 +76,10 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
 
     func addSecureElementPassViewController(_ controller: PKAddSecureElementPassViewController, didFinishAddingSecureElementPasses passes: [PKSecureElementPass]?, error: (any Error)?) {
         if let error = error as? PKAddSecureElementPassError {
-            delegate?.AlertWalletController(AlertWalletController.shared, onWalletProvisioningError: error.localizedDescription)
+            delegate?.AlertWalletUIViewController(AlertWalletController.shared, onWalletProvisioningError: error.localizedDescription)
         }
         if (passes != nil ) {
-            delegate?.AlertWalletController(AlertWalletController.shared, onWalletProvisioningSuccess: "DONE")
+            delegate?.AlertWalletUIViewController(AlertWalletController.shared, onWalletProvisioningSuccess: "DONE")
         }
         controller.dismiss(animated: true)
     }
@@ -126,9 +126,9 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
             }
             let canAddSePass = PassManager().canAddSePass(for: config)
             if (canAddSePass){
-                delegate?.AlertWalletController(AlertWalletController.shared, onPassAddValidation: true)
+                delegate?.AlertWalletUIViewController(AlertWalletController.shared, onPassAddValidation: true)
             } else{
-                delegate?.AlertWalletController(AlertWalletController.shared, onPassAddValidation: false)
+                delegate?.AlertWalletUIViewController(AlertWalletController.shared, onPassAddValidation: false)
             }
         }
     }
