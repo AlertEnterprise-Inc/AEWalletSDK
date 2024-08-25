@@ -28,13 +28,12 @@ public class AlertWalletController: UIViewController {
         super.viewDidLoad()
     }
 
-
+    /** response will be delegated to onEligibilityResult function*/
     public func checkEligibility(){
-        let serverURL = PropertiesManager.shared.getServerURL()
-        if (serverURL != nil){
-            delegate?.isEligible(self, onEligibilityResult: true)
-        }else{
-            delegate?.isEligible(self, onEligibilityResult: false)
+        if PKAddPassesViewController.canAddPasses() {
+            delegate?.AlertWalletController(self, onEligibilityResult: true)
+        } else {
+            delegate?.AlertWalletController(self, onEligibilityResult: false)
         }
     }
 
@@ -45,7 +44,7 @@ public class AlertWalletController: UIViewController {
 
     public func getDevicePasses() -> [PKPass]{
         let passManager: PassManager  = PassManager()
-        return passManager.getPasses(of: .any)
+        return passManager.getPasses(of: .secureElement)
     }
 
     public func getPass(provisioningCredentialIdentifier: String) -> PKPass? {
@@ -72,9 +71,9 @@ public class AlertWalletController: UIViewController {
             switch result{
             case .success (let data) :
                 let credential : ProvisioningCredential  = data.credential!
-                self.delegate?.provisioningSuccess(self, credentialCreateSuccess: credential)
+                self.delegate?.AlertWalletController(self, onProvisioningSuccess: credential)
             case .failure(let error):
-                self.delegate?.provisioningError(self, credentialCreateError: error)
+                self.delegate?.AlertWalletController(self, onProvisioningError: error)
             }
         }
     }
@@ -84,5 +83,6 @@ public class AlertWalletController: UIViewController {
     }
 
     public func canAddPass(parentViewController: UIViewController, credential: ProvisioningCredential){
+        ProvisioningHelper.shared.validateWalletProvisioning(with: credential, viewController: parentViewController, delegate: delegate)
     }
 }
