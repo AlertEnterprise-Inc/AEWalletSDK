@@ -7,8 +7,8 @@
 import Foundation
 
 public struct ProvisioningRequestPayload: Codable {
-    var userId: String
-    var badgeId: String
+    public var userId: String
+    public var badgeId: String
 
     init(){
         self.userId = ""

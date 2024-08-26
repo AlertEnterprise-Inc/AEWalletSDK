@@ -7,7 +7,7 @@
 
 import Foundation
 public struct ProvisionAPIErrorResponse :Error ,Codable {
-    var error: String?
+    public var error: String?
 
     init(){
         self.error = nil

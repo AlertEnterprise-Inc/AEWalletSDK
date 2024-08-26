@@ -7,13 +7,13 @@
 
 import Foundation
 public struct ProvisionAPIResponse:Codable{
-    let success:Bool
-    let data : ProvisioningInformation!
-    let numberOfElements : Int
-    let totalPages : Int
-    let totalElements : Int
-    let pageNumber : Int
-    let pageSize : Int
+    public let success:Bool
+    public let data : ProvisioningInformation!
+    public let numberOfElements : Int
+    public let totalPages : Int
+    public let totalElements : Int
+    public let pageNumber : Int
+    public let pageSize : Int
 
     init(){
         self.success = false
