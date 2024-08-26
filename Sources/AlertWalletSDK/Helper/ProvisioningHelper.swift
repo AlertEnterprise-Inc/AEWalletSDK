@@ -24,7 +24,7 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
         let localizedDescription = PropertiesManager.shared.getPassDescription() ?? "Pass"
         self.delegate = delegate
 
-        let passThumbnail = getPassThumbnailImage(product: PropertiesManager.shared.getPassProductForCardArt() ?? "alert")
+        let passThumbnail = getPassThumbnailImage(product: PropertiesManager.shared.getPassProductForCardArt() ?? "alert-card_art")
 
         let preview = PKShareablePassMetadata.Preview(
             passThumbnail: passThumbnail.cgImage!,
@@ -49,7 +49,7 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
 
         PKAddShareablePassConfiguration.forPassMetadata([passMetadata], action: .add) { sePassConfig, err in
             guard let config = sePassConfig else {
-                print("intiateWalletProvisioning:: error creating pass config - \(String(describing: err))")
+                NSLog("intiateWalletProvisioning:: error creating pass config - \(String(describing: err))")
                 return
             }
             guard let vc = self.createSEViewController(for: config) else { return }
@@ -58,17 +58,17 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
     }
 
     private func getPassThumbnailImage(product:String) -> UIImage {
-        return UIImage(named: product + "-card_art")!
+        return UIImage(named: product)!
     }
 
     private func createSEViewController(for passConfig: PKAddShareablePassConfiguration) -> PKAddSecureElementPassViewController? {
         let canAddSePass = PassManager().canAddSePass(for: passConfig)
         guard canAddSePass else {
-            print("intiateWalletProvisioning:: Unable to add an SE Pass with specified configuration")
+            NSLog("intiateWalletProvisioning:: Unable to add an SE Pass with specified configuration")
             return nil
         }
         guard let vc = PKAddSecureElementPassViewController(configuration: passConfig, delegate: self) else {
-            print("intiateWalletProvisioning:: Unable to create an SE Pass VC with specified configuration")
+            NSLog("intiateWalletProvisioning:: Unable to create an SE Pass VC with specified configuration")
             return nil
         }
         return vc
@@ -96,7 +96,7 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
         let ownerDisplayName = PropertiesManager.shared.getOwnerName() ?? "Johnny"
         let localizedDescription = PropertiesManager.shared.getPassDescription() ?? "Pass"
         self.delegate = delegate
-        let passThumbnail = getPassThumbnailImage(product: PropertiesManager.shared.getPassProductForCardArt() ?? "alert")
+        let passThumbnail = getPassThumbnailImage(product: PropertiesManager.shared.getPassProductForCardArt() ?? "alert-card_art")
 
         let preview = PKShareablePassMetadata.Preview(
             passThumbnail: passThumbnail.cgImage!,
@@ -121,7 +121,7 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
 
         PKAddShareablePassConfiguration.forPassMetadata([passMetadata], action: .add) { sePassConfig, err in
             guard let config = sePassConfig else {
-                print("intiateWalletProvisioning:: error creating pass config - \(String(describing: err))")
+                NSLog("intiateWalletProvisioning:: error creating pass config - \(String(describing: err))")
                 return
             }
             let canAddSePass = PassManager().canAddSePass(for: config)

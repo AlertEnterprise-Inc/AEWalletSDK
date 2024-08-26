@@ -9,8 +9,14 @@ import Foundation
 import UIKit
 import PassKit
 import WatchConnectivity
+import os
 
 public class AlertWalletController: UIViewController {
+
+    private static let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: AlertWalletController.self)
+    )
 
     public static let shared = AlertWalletController()
     public var delegate: AlertWalletControllerDelegate?
@@ -30,6 +36,7 @@ public class AlertWalletController: UIViewController {
 
     /** response will be delegated to onEligibilityResult function*/
     public func checkEligibility(){
+        Self.logger.debug("AlertWalletController checkEligibility invoked")
         if PKAddPassesViewController.canAddPasses() {
             delegate?.AlertWalletUIViewController(self, onEligibilityResult: true)
         } else {

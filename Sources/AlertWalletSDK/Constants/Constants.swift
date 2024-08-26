@@ -9,7 +9,6 @@ import Foundation
 
 enum Constants {
     enum API {
-        static let PROV_WITH_PASS_IDENTIFIER="%1$@/api/mobile/%2$@/prepareProvisioning/pass/%3$@"
         static let PROV_WITHOUT_PASS_IDENTIFIER="%1$@/partner/v1/prepareProvisioning"
     }
     static let HEADER_KEY_ACCEPT = "Accept"
