@@ -8,6 +8,7 @@
 import Foundation
 import PassKit
 import os
+import UIKit
 
 class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
 
@@ -64,8 +65,8 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
     }
 
     private func getPassThumbnailImage(product:String) -> UIImage {
-        let bundle = Bundle.main
-        return UIImage(named: product ,in: .main ,compatibleWith: nil)!
+         let bundle = Bundle(for: ProvisioningHelper.self)
+         return UIImage(named: product ,in: .main ,compatibleWith: nil)!
     }
 
     private func createSEViewController(for passConfig: PKAddShareablePassConfiguration) -> PKAddSecureElementPassViewController? {
