@@ -64,15 +64,18 @@ public class AlertWalletController: UIViewController {
 
     /** response will be delegated to IsWatched function*/
     public func isWatchPaired() {
+        Self.logger.info("AlertWalletController isWatchPaired Begin")
         AppleWatchDetector.shared.delegate =  delegate
         AppleWatchDetector.shared.initialize()
     }
     public func checkIfWatchPaired() {
+        Self.logger.info("AlertWalletController checkIfWatchPaired Begin")
         AppleWatchDetector.shared.delegate =  delegate
         AppleWatchDetector.shared.checkIfWatchIsPaired()
     }
 
     public func startPassProvisioning(userId: String, badgeId: String){
+        Self.logger.info("AlertWalletController startPassProvisioning Begin")
         let payload = ProvisioningRequestPayload(userId:userId,badgeId:badgeId)
         APIService.shared.preparePass(payloadData: payload ){(result: Result<ProvisionAPISuccessResponse, ProvisionAPIErrorResponse>)in
             switch result{
@@ -86,10 +89,12 @@ public class AlertWalletController: UIViewController {
     }
 
     public func saveToWallet(parentViewController: UIViewController, credential: ProvisioningCredential){
+        Self.logger.info("AlertWalletController saveToWallet Begin")
         ProvisioningHelper.shared.initiateWalletProvisioning(with: credential, viewController: parentViewController, delegate: delegate)
     }
 
     public func canAddPass(parentViewController: UIViewController, credential: ProvisioningCredential){
+        Self.logger.info("AlertWalletController saveToWallet Begin")
         ProvisioningHelper.shared.validateWalletProvisioning(with: credential, viewController: parentViewController, delegate: delegate)
     }
 }
