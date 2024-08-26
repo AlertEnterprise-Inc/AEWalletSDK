@@ -1,12 +1,20 @@
 //
 //  ProvisionAPISuccessResponse.swift
-//  
+//
 //
 //  Created by Reddy on 23/08/24.
 //
 
 import Foundation
 
-struct ProvisionAPISuccessResponse:Codable{
+public struct ProvisionAPISuccessResponse:Codable{
     var credential: ProvisioningCredential?
+
+    init(){
+        self.credential = ProvisioningCredential()
+    }
+
+    init(credential:ProvisioningCredential){
+        self.credential = credential
+    }
 }

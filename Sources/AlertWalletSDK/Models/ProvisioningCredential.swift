@@ -9,4 +9,12 @@ import Foundation
 
 public struct ProvisioningCredential: Codable {
     public var provisioningInformation: ProvisioningInformation
+
+    init(){
+        self.provisioningInformation = ProvisioningInformation()
+    }
+
+    init(provisioningInformation : ProvisioningInformation){
+        self.provisioningInformation = provisioningInformation
+    }
 }

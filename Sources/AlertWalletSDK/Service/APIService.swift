@@ -15,7 +15,7 @@ final class APIService{
     func preparePass(payloadData: ProvisioningRequestPayload, withCompletion completion: @escaping (Result<ProvisionAPISuccessResponse,ProvisionAPIErrorResponse>) -> Void){
 
         let endpoint =  String(format: Constants.API.PROV_WITHOUT_PASS_IDENTIFIER , PropertiesManager.shared.getServerURL()! )
-        let _payload =  ["identityId": payloadData.identityId, "identityMobileCredentialId": payloadData.identityMobileCredentialId]
+        let _payload =  ["identityId": payloadData.userId, "identityMobileCredentialId": payloadData.badgeId]
         let payload = try? JSONEncoder().encode(_payload)
         NSLog("URL for preparePassProvisioning: \(endpoint)")
         let header = Constants.HEADER_KEY_AUTHORIZATION_PREFIX + PropertiesManager.shared.getAccessToken()!

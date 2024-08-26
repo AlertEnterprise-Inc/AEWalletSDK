@@ -65,8 +65,8 @@ public class AlertWalletController: UIViewController {
         AppleWatchDetector.shared.checkIfWatchIsPaired()
     }
 
-    public func startPassProvisioning(identityId: String, identityMobileCredentialId: String){
-        let payload = ProvisioningRequestPayload(identityId:identityId,identityMobileCredentialId:identityMobileCredentialId)
+    public func startPassProvisioning(userId: String, badgeId: String){
+        let payload = ProvisioningRequestPayload(userId:userId,badgeId:badgeId)
         APIService.shared.preparePass(payloadData: payload ){(result: Result<ProvisionAPISuccessResponse, ProvisionAPIErrorResponse>)in
             switch result{
             case .success (let data) :

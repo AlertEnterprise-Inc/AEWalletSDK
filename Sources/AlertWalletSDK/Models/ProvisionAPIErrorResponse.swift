@@ -8,4 +8,12 @@
 import Foundation
 public struct ProvisionAPIErrorResponse :Error ,Codable {
     var error: String?
+
+    init(){
+        self.error = nil
+    }
+
+    init(error:String){
+        self.error = error
+    }
 }
