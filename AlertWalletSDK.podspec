@@ -64,10 +64,10 @@ Pod::Spec.new do |spec|
   #
 
   #  spec.platform     = :ios
-     spec.platform     = :ios, "16.0"
+     spec.platform     = :ios
 
   #  When using multiple platforms
-  # spec.ios.deployment_target = "5.0"
+    spec.ios.deployment_target = "16.0"
   # spec.osx.deployment_target = "10.7"
   # spec.watchos.deployment_target = "2.0"
   # spec.tvos.deployment_target = "9.0"
@@ -118,6 +118,8 @@ Pod::Spec.new do |spec|
 
   # spec.framework  = "SomeFramework"
   # spec.frameworks = "SomeFramework", "AnotherFramework"
+
+  spec.frameworks = "Foundation", "UIKit", "PassKit", "WatchConnectivity" , "os"
 
   # spec.library   = "iconv"
   # spec.libraries = "iconv", "xml2"
