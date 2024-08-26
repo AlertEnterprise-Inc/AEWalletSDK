@@ -1,19 +1,19 @@
 //
 //  ProvisionAPIResponse.swift
-//  
+//
 //
 //  Created by Reddy on 23/08/24.
 //
 
 import Foundation
 public struct ProvisionAPIResponse:Codable{
-    public let success:Bool
-    public let data : ProvisioningInformation!
-    public let numberOfElements : Int
-    public let totalPages : Int
-    public let totalElements : Int
-    public let pageNumber : Int
-    public let pageSize : Int
+    public var success:Bool
+    public var data : ProvisioningInformation!
+    public var numberOfElements : Int
+    public var totalPages : Int
+    public var totalElements : Int
+    public var pageNumber : Int
+    public var pageSize : Int
 
     init(){
         self.success = false
@@ -23,5 +23,21 @@ public struct ProvisionAPIResponse:Codable{
         self.totalElements = 0
         self.pageNumber = 0
         self.pageSize = 0
+    }
+
+    init(success:Bool,
+         data : ProvisioningInformation!,
+         numberOfElements : Int,
+         totalPages : Int,
+         totalElements : Int,
+         pageNumber : Int,
+         pageSize : Int){
+        self.success = success
+        self.data = data
+        self.numberOfElements = numberOfElements
+        self.totalPages = totalPages
+        self.totalElements = totalElements
+        self.pageNumber = pageNumber
+        self.pageSize = pageSize
     }
 }

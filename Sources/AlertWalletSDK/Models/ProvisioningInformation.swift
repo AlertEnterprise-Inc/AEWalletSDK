@@ -23,4 +23,17 @@ public struct ProvisioningInformation: Codable {
         self.accountHash = nil
         self.relyingPartyIdentifier = nil
     }
+    init(provisioningCredentialIdentifier: String,
+         sharingInstanceIdentifier: String,
+         cardTemplateIdentifier: String,
+         environmentIdentifier: String?,
+         accountHash: String?,
+         relyingPartyIdentifier: String?){
+        self.provisioningCredentialIdentifier = provisioningCredentialIdentifier
+        self.sharingInstanceIdentifier = sharingInstanceIdentifier
+        self.cardTemplateIdentifier = cardTemplateIdentifier
+        self.environmentIdentifier = environmentIdentifier
+        self.accountHash = accountHash
+        self.relyingPartyIdentifier = relyingPartyIdentifier
+    }
 }
