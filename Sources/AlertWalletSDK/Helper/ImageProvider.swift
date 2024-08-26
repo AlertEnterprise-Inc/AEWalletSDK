@@ -13,7 +13,10 @@ public class ImageProvider {
     public init() {}
 
     public func image(named imageName: String) -> UIImage? {
-        return UIImage(named: imageName, in: Bundle(for: type(of: self)), compatibleWith: nil)
+       /*** for COCOpod */
+        //return UIImage(named: imageName, in: Bundle(for: type(of: self)), compatibleWith: nil)
+       //for SPM
+        return UIImage(named: imageName, in: .module, compatibleWith: nil)
     }
 }
 

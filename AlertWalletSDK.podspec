@@ -38,8 +38,8 @@ Pod::Spec.new do |spec|
   #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
 
-  spec.license      = "MIT"
-  # spec.license      = { :type => "MIT", :file => "FILE_LICENSE" }
+  # spec.license      = "MIT"
+    spec.license      = { :type => "MIT", :file => "LICENSE" }
 
 
   # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -63,8 +63,8 @@ Pod::Spec.new do |spec|
   #  the deployment target. You can optionally include the target after the platform.
   #
 
-  #  spec.platform     = :ios
      spec.platform     = :ios
+  #  spec.platform     = :ios "16.0"
 
   #  When using multiple platforms
     spec.ios.deployment_target = "16.0"
@@ -119,7 +119,7 @@ Pod::Spec.new do |spec|
   # spec.framework  = "SomeFramework"
   # spec.frameworks = "SomeFramework", "AnotherFramework"
 
-  spec.frameworks = "Foundation", "UIKit", "PassKit", "WatchConnectivity" , "os"
+  spec.frameworks = "Foundation", "UIKit", "PassKit", "WatchConnectivity"
 
   # spec.library   = "iconv"
   # spec.libraries = "iconv", "xml2"
