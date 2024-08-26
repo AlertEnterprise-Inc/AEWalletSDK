@@ -46,13 +46,17 @@ final class APIService{
                 }
                 if let data = data {
                     let decoder = JSONDecoder()
-                    let bodyString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) ?? "Can't render body; not utf8 encoded"
-                    Self.logger.error("alertSDK APIService \(error.debugDescription)")
                     let decoded = try? decoder.decode(ProvisionAPIResponse.self, from: data)
                     if decoded != nil {
                         let credential = ProvisioningCredential(provisioningInformation: decoded!.data)
                         completion(.success(ProvisionAPISuccessResponse(credential: credential)))
                     }
+                }
+
+
+                let error = error
+                if (error != nil) {
+                    completion(.failure(ProvisionAPIErrorResponse(error: error?.localizedDescription)))
                 }
             }
         }.resume()

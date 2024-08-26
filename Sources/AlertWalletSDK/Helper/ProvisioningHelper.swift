@@ -62,11 +62,6 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
         }
     }
 
-    private func getPassThumbnailImage(product:String) -> UIImage {
-         let bundle = Bundle(for: ProvisioningHelper.self)
-         return UIImage(named: product ,in: .main ,compatibleWith: nil)!
-    }
-
     private func createSEViewController(for passConfig: PKAddShareablePassConfiguration) -> PKAddSecureElementPassViewController? {
         let canAddSePass = PassManager().canAddSePass(for: passConfig)
         guard canAddSePass else {
