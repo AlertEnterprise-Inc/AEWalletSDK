@@ -13,7 +13,7 @@ public struct ProvisionAPIErrorResponse :Error ,Codable {
         self.error = nil
     }
 
-    init(error:String){
+    init(error:String?){
         self.error = error
     }
 }
