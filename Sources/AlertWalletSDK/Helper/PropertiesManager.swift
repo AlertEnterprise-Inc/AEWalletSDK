@@ -16,7 +16,6 @@ public class PropertiesManager {
     private let environmentIdentifierKey = "alert-sdk-cardTemplate-identifier"
     private let ownerNameKey = "alert-sdk-pass-owner-name"
     private let passDescriptionKey = "alert-sdk-pass-preview-description"
-    private let passProductForCardArtKey = "alert-sdk-pass-card_art-product"
 
     private let defaults = UserDefaults.standard
 
@@ -80,25 +79,12 @@ public class PropertiesManager {
     public func clearPassDescription() -> Void {
         UserDefaults.standard.removeObject(forKey: passDescriptionKey)
     }
-    public func getPassProductForCardArt() -> String? {
-        if let passProductForCardArt = defaults.string(forKey: passProductForCardArtKey) {
-            return passProductForCardArt
-        }
-        return nil
-    }
-    public func setPassProductForCardArt(passProductForCardArt: String) {
-        defaults.setValue(passProductForCardArt, forKey: passProductForCardArtKey)
-    }
-    public func clearPassProductForCardArt() -> Void {
-        UserDefaults.standard.removeObject(forKey: passProductForCardArtKey)
-    }
     public func clearAll() -> Void {
         clearAccessToken()
         clearServerURL()
         clearOwnerName()
         clearEnvironmentIdentifier()
         clearPassDescription()
-        clearPassProductForCardArt()
     }
 
 }
