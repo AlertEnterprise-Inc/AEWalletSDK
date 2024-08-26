@@ -19,7 +19,7 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
 
     static let shared = ProvisioningHelper()
     public weak var delegate: AlertWalletControllerDelegate?
-    public func initiateWalletProvisioning(with provisioningResponse: ProvisioningCredential , viewController: UIViewController , delegate: AlertWalletControllerDelegate?){
+    public func initiateWalletProvisioning(with provisioningResponse: ProvisioningCredential , viewController: UIViewController , delegate: AlertWalletControllerDelegate?, previewImage: UIImage){
         Self.logger.info("ProvisioningHelper initiateWalletProvisioning Begin")
         var provisioningInfo = provisioningResponse.provisioningInformation
         provisioningInfo.environmentIdentifier = PropertiesManager.shared.getEnvironmentIdentifier() ?? "53b70cac-ec0c-4712-b7ba-995ddc119dfd"
@@ -31,10 +31,8 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
         let localizedDescription = PropertiesManager.shared.getPassDescription() ?? "Pass"
         self.delegate = delegate
 
-        let passThumbnail = getPassThumbnailImage(product: PropertiesManager.shared.getPassProductForCardArt() ?? "alert-card_art")
-
         let preview = PKShareablePassMetadata.Preview(
-            passThumbnail: passThumbnail.cgImage!,
+            passThumbnail: previewImage.cgImage!,
             localizedDescription: localizedDescription)
 
         preview.ownerDisplayName = ownerDisplayName
@@ -93,7 +91,7 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
     }
 
 
-    public func validateWalletProvisioning(with provisioningResponse: ProvisioningCredential , viewController: UIViewController , delegate: AlertWalletControllerDelegate?){
+    public func validateWalletProvisioning(with provisioningResponse: ProvisioningCredential , viewController: UIViewController , delegate: AlertWalletControllerDelegate?, previewImage: UIImage){
         Self.logger.info("ProvisioningHelper validateWalletProvisioning Begin")
         var provisioningInfo = provisioningResponse.provisioningInformation
         provisioningInfo.environmentIdentifier = PropertiesManager.shared.getEnvironmentIdentifier() ?? "53b70cac-ec0c-4712-b7ba-995ddc119dfd"
@@ -104,10 +102,9 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
         let ownerDisplayName = PropertiesManager.shared.getOwnerName() ?? "Johnny"
         let localizedDescription = PropertiesManager.shared.getPassDescription() ?? "Pass"
         self.delegate = delegate
-        let passThumbnail = getPassThumbnailImage(product: PropertiesManager.shared.getPassProductForCardArt() ?? "alert-card_art")
 
         let preview = PKShareablePassMetadata.Preview(
-            passThumbnail: passThumbnail.cgImage!,
+            passThumbnail: previewImage.cgImage!,
             localizedDescription: localizedDescription)
 
         preview.ownerDisplayName = ownerDisplayName

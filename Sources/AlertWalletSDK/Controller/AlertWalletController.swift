@@ -88,13 +88,13 @@ public class AlertWalletController: UIViewController {
         }
     }
 
-    public func saveToWallet(parentViewController: UIViewController, credential: ProvisioningCredential){
+    public func saveToWallet(parentViewController: UIViewController, credential: ProvisioningCredential, previewImage: UIImage){
         Self.logger.info("AlertWalletController saveToWallet Begin")
-        ProvisioningHelper.shared.initiateWalletProvisioning(with: credential, viewController: parentViewController, delegate: delegate)
+        ProvisioningHelper.shared.initiateWalletProvisioning(with: credential, viewController: parentViewController, delegate: delegate, previewImage: previewImage)
     }
 
-    public func canAddPass(parentViewController: UIViewController, credential: ProvisioningCredential){
+    public func canAddPass(parentViewController: UIViewController, credential: ProvisioningCredential, previewImage: UIImage){
         Self.logger.info("AlertWalletController saveToWallet Begin")
-        ProvisioningHelper.shared.validateWalletProvisioning(with: credential, viewController: parentViewController, delegate: delegate)
+        ProvisioningHelper.shared.validateWalletProvisioning(with: credential, viewController: parentViewController, delegate: delegate, previewImage: previewImage)
     }
 }
