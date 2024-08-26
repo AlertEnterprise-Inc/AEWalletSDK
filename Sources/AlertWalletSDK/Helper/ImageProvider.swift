@@ -13,7 +13,7 @@ public class ImageProvider {
     public init() {}
 
     public func image(named imageName: String) -> UIImage? {
-        return UIImage(named: imageName, in: Bundle.module, compatibleWith: nil)
+        return UIImage(named: imageName, in: .module, compatibleWith: nil)
     }
 }
 
