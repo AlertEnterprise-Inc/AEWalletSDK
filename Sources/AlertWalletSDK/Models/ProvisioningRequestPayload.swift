@@ -10,12 +10,12 @@ public struct ProvisioningRequestPayload: Codable {
     public var userId: String
     public var badgeId: String
 
-    init(){
+    public init(){
         self.userId = ""
         self.badgeId = ""
     }
 
-    init(userId:String, badgeId:String){
+   public init(userId:String, badgeId:String){
         self.userId = userId
         self.badgeId = badgeId
     }

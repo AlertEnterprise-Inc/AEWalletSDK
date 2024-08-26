@@ -10,11 +10,11 @@ import Foundation
 public struct ProvisionAPISuccessResponse:Codable{
     public var credential: ProvisioningCredential?
 
-    init(){
+    public init(){
         self.credential = ProvisioningCredential()
     }
 
-    init(credential:ProvisioningCredential){
+    public init(credential:ProvisioningCredential){
         self.credential = credential
     }
 }

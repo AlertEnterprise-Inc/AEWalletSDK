@@ -15,7 +15,7 @@ public struct ProvisionAPIResponse:Codable{
     public var pageNumber : Int
     public var pageSize : Int
 
-    init(){
+    public init(){
         self.success = false
         self.data = nil
         self.numberOfElements = 0
@@ -25,7 +25,7 @@ public struct ProvisionAPIResponse:Codable{
         self.pageSize = 0
     }
 
-    init(success:Bool,
+    public init(success:Bool,
          data : ProvisioningInformation!,
          numberOfElements : Int,
          totalPages : Int,

@@ -9,11 +9,11 @@ import Foundation
 public struct ProvisionAPIErrorResponse :Error ,Codable {
     public var error: String?
 
-    init(){
+    public  init(){
         self.error = nil
     }
 
-    init(error:String?){
+    public init(error:String?){
         self.error = error
     }
 }

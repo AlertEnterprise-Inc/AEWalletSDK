@@ -15,7 +15,7 @@ public struct ProvisioningInformation: Codable {
     public var accountHash: String?
     public var relyingPartyIdentifier: String?
 
-    init(){
+    public init(){
         self.provisioningCredentialIdentifier = ""
         self.sharingInstanceIdentifier = ""
         self.cardTemplateIdentifier = ""
@@ -23,7 +23,7 @@ public struct ProvisioningInformation: Codable {
         self.accountHash = nil
         self.relyingPartyIdentifier = nil
     }
-    init(provisioningCredentialIdentifier: String,
+    public init(provisioningCredentialIdentifier: String,
          sharingInstanceIdentifier: String,
          cardTemplateIdentifier: String,
          environmentIdentifier: String?,
