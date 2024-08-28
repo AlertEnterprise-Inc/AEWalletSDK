@@ -77,10 +77,14 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
 
     func addSecureElementPassViewController(_ controller: PKAddSecureElementPassViewController, didFinishAddingSecureElementPasses passes: [PKSecureElementPass]?, error: (any Error)?) {
         if let error = error as? PKAddSecureElementPassError {
-            delegate?.AlertWalletUIViewController(AlertWalletController.shared, onWalletProvisioningError: error.localizedDescription)
+            delegate?.AlertWalletUIViewController(AlertWalletController.shared, onWalletProvisioningError: WalletProvisioningResponse(message: error.localizedDescription)   )
         }
         if (passes != nil ) {
-            delegate?.AlertWalletUIViewController(AlertWalletController.shared, onWalletProvisioningSuccess: "\(String(describing: passes?.first?.passURL)) ?? 'Added Successfully without Link' ")
+            delegate?.AlertWalletUIViewController(AlertWalletController.shared, onWalletProvisioningSuccess: WalletProvisioningResponse(
+                success: true, 
+                passUrl: passes?.first?.passURL,
+                message: "Pass Added Successfully",
+                pass: PassInformation(passType: passes?.first?.passType.hashValue ,passTypeIdentifier: passes?.first?.passTypeIdentifier , webServiceURL: passes?.first?.webServiceURL)))
         }
         controller.dismiss(animated: true)
     }
