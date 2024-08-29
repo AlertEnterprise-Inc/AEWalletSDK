@@ -37,15 +37,30 @@ dependencies: [
     .package(url: "https://github.com/AlertEnterprise-Inc/AlertWalletSDK.git", from: "1.0.0")
 ]
 ```
+
+### CocoaPods
+To integrate AlertWalletSDK using CocoaPods, add the following line to your Podfile:
+
+    pod 'AlertWalletSDK', '~> 1.0'
+
+Then run:
+
+    pod install
+
+
 ## Getting Started
 1. Import the Library
 Import the `AlertWalletSDK` module into your Swift files where you plan to use it:
+
 ```swift
 import AlertWalletSDK
 ```
 2. Configure the SDK
 Ensure that the SDK is properly configured in your app. This may involve setting up necessary credentials or configurations specific to your use case.
 
+```swift
+PropertiesManager.shared.setEnvironmentIdentifier(environmentIdentifier: "your-environment-id")
+```
 
 ## Usage
 
@@ -59,32 +74,117 @@ class AlertViewController : UIViewController,AlertWalletControllerDelegate
 ```
 Explanation:
 `viewDidLoad():` Called after the view controller has loaded its view hierarchy into memory. This is where UI setup is typically performed.
+
 3. Call functions of AlertWalletController(Singleton) using shared reference
 ```swift
 AlertWalletController.shared.isWatchPaired()
 AlertWalletController.shared.getRemotePasses()
 AlertWalletController.shared.getDevicePasses()
 ```
-4. To handle these events, you need to implement delegate functions accordingly for Eg
-The `startPassProvisioning` method in `AlertWalletController` is responsible for initiating the process of provisioning a pass to Apple Wallet. This process involves creating or updating a pass in the user's Wallet, which requires interaction with Apple Wallet's APIs.
-```swift
- AlertWalletController.shared.startPassProvisioning(identityId: userId,identityMobileCredentialId:badgeId)
-```
-will delegate response to `provisioningSuccess` or `provisioningError`
+4. To handle these events, you need to implement delegate functions accordingly for Eg. The `saveToWallet` method of `AlertWalletController` allows you to save a pass to the Apple Wallet. It uses the provided `ProvisioningCredential` and an optional preview image to add the pass to the user's Wallet.
+
+### Function Signature
 
 ```swift
-func provisioningError(_ controller: AlertWalletController, credentialCreateError credential: ProvisionAPIErrorResponse) {
-        Self.logger.debug("implement Error flow" )
-    }
+func saveToWallet(parentViewController: UIViewController, credential: ProvisioningCredential, previewImage: UIImage?)
 ```
+
+### Parameters
+
+- **parentViewController (`UIViewController`)**: The view controller that will present any necessary UI components or dialogs during the process of adding the pass to Apple Wallet.
+
+- **credential (`ProvisioningCredential`)**: The credential object that contains all necessary details for the pass, including identifiers and metadata required for provisioning.
+
+- **previewImage (`UIImage?`)**: An optional image to be shown as a preview for the pass. This can enhance user experience by displaying a visual representation of the pass during the addition process.
+
+### Returns
+
+- **Void**: This method does not return any value. It performs the operation of saving the pass to the Wallet.
+
+### Example Usage
+
 ```swift
-func provisioningSuccess(_ controller: AlertWalletController, credentialCreateSuccess credential: ProvisioningCredential) {
-        Self.logger.debug(" \(credential.provisioningInformation.provisioningCredentialIdentifier)" )
-        Self.logger.debug(" \(credential.provisioningInformation.cardTemplateIdentifier)" )
-        Self.logger.debug(" \(credential.provisioningInformation.sharingInstanceIdentifier)" )
-        AlertWalletController.shared.saveToWallet(parentViewController: self, credential: credential)
-    }
+import UIKit
+import PassKit
+
+// Initialize ProvisioningCredential
+let credential = ProvisioningCredential(/* initialization parameters */)
+
+// Load a preview image
+let previewImage = UIImage(named: "alert-card_art")!
+
+// Call saveToWallet to add the pass
+AlertWalletController.shared.saveToWallet(parentViewController: self, credential: credential, previewImage: previewImage)
 ```
+
+### Callback Methods
+
+To handle the results of the `saveToWallet` operation, implement the following delegate methods in your `AlertWalletControllerDelegate`:
+
+#### `onWalletProvisioningError`
+
+This method is called if an error occurs while provisioning the pass to Apple Wallet.
+
+**Function Signature:**
+
+```swift
+func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningError error: String)
+```
+
+**Parameters:**
+
+- **controller (`AlertWalletController`)**: The instance of `AlertWalletController` that invoked the callback.
+- **error (`String`)**: A description of the error that occurred during provisioning.
+
+**Example Implementation:**
+
+```swift
+func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningError error: String) {
+    Self.logger.debug("walletProvisioningError ::  \(error)" )
+    // Handle the error (e.g., show an alert to the user)
+}
+```
+
+**Details:**
+
+- Use this callback to handle errors during the Wallet provisioning process.
+- Update the UI or notify the user about the failure to ensure a smooth experience.
+
+#### `onWalletProvisioningSuccess`
+
+This method is called when the pass is successfully provisioned to Apple Wallet.
+
+**Function Signature:**
+
+```swift
+func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningSuccess success: String)
+```
+
+**Parameters:**
+
+- **controller (`AlertWalletController`)**: The instance of `AlertWalletController` that invoked the callback.
+- **success (`String`)**: A success message or identifier confirming that the pass was added to the Wallet.
+
+**Example Implementation:**
+
+```swift
+func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningSuccess success: String) {
+    Self.logger.debug("walletProvisioningSuccess ::  \(success)" )
+    self.viewmodel.showProgressView = false
+    self.viewmodel.stateModel.cards[self.viewmodel.activeCard].showAddtoWalletButton = false
+    // Notify the user or update the UI to reflect the successful addition
+}
+```
+
+**Details:**
+
+- Use this callback to handle successful provisioning.
+- Update the UI to reflect that the pass has been added and to hide any progress indicators or buttons related to the provisioning process.
+
+---
+
+These methods ensure that your app can handle both successful and unsuccessful attempts to add passes to Apple Wallet, providing a better user experience and facilitating error management.
+  
 5. for more details about delegate callback function refer to API section
 
 
@@ -97,34 +197,221 @@ The `AlertWalletController` class is designed to manage and present Apple Wallet
 `AlertWalletController` is a singleton object
 To access the function of `AlertWalletController`, use shared variable of the class.
 
-##### functions
+#### Main Responsibilities:
+- **Eligibility Check**: Verify if the device and app are eligible for pass provisioning.
+- **Provisioning**: Manage the process of provisioning a pass, including handling success and error scenarios.
+- **Pass Management**: Retrieve and manage device and remote passes.
 
-### `startPassProvisioning`
+### Properties
+
+#### `shared`
+
+```swift
+public static let shared = AlertWalletController()
+```
+
+- **Description**: 
+  - The `shared` property provides a singleton instance of the `AlertWalletController` class. This is the only instance that should be used throughout your application to ensure consistent behavior and avoid multiple instances.
+
+- **Usage**:
+  - Access the shared instance using `AlertWalletController.shared` to interact with the controller's functionality, such as checking eligibility or provisioning passes.
+
+#### `delegate`
+
+```swift
+public weak var delegate: AlertWalletControllerDelegate?
+```
+
+- **Description**: 
+  - The `delegate` property is used to set an object that will receive asynchronous event callbacks related to pass provisioning and other Wallet interactions. This allows your application to respond to various events, such as success or failure of provisioning operations.
+
+- **Usage**:
+  - Assign a delegate that conforms to the `AlertWalletControllerDelegate` protocol to handle callbacks and update your app’s UI or state based on the results of Wallet interactions.
+
+## functions
+
+### `checkEligibility`
+Here's how you might use it in your code:
+ 
+    AlertWalletController.shared.checkEligibility()
 
 | **Method**                 | **Description**                                                                                      | **Usage**                                                                                            | **Parameters**
 |----------------------------|------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `startPassProvisioning()`   | Starts the process of provisioning a pass to Apple Wallet.                                          | Call this method to initiate the provisioning process for the pass associated with this controller. | `identityId: String, identityMobileCredentialId: String`
+| `checkEligibility()`   | To verify if the device and app meet the requirements for pass provisioning.                                          | Call it during the initialization phase of your app or when you need to verify if the pass provisioning process can proceed. | `nil`
 
 **Delegate Callbacks:**
+
+    func AlertWalletUIViewController(_ controller: AlertWalletController, onEligibilityResult isEligible: Bool)
 
 | **Callback Method**                                | **Description**                                                      | **Parameters**                                |
 |----------------------------------------------------|----------------------------------------------------------------------|-----------------------------------------------|
-| `credentialCreateSuccess`    | Called when the pass is successfully create a credenttial to add to wallet.    | `controller: `, `credential: ProvisioningCredential` |
-| `credentialCreateError`      | Called when an error occurs during the provisioning process.         | `_ controller: AlertWalletController`, `credentialCreateError credential: ProvisionAPIErrorResponse` |
+| `onEligibilityResult`    | Once the eligibility check is complete, the SDK will typically notify your app via a delegate method or a callback. This allows you to handle the result appropriately.    | `_ controller: isEligible` |
 
-### `saveToWallet(parentViewController: UIViewController, credential: ProvisioningCredential)`
 
-| **Method**               | **Description**                                                                                     | **Returns**         |
-|--------------------------|-----------------------------------------------------------------------------------------------------|---------------------|
-| `saveToWallet(_:)`     | Simulates the process of adding a pass to Apple Wallet. This method is a placeholder.              |  success / failure in delegate response) |
+### `isWatchPaired`
+Here's how you might use it in your code:
+ 
+    AlertWalletController.shared.isWatchPaired()
+
+| **Method**                 | **Description**                                                                                      | **Usage**                                                                                            | **Parameters**
+|----------------------------|------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `isWatchPaired()`   | To determine whether the user’s iOS device is paired with an Apple Watch. This is a critical check when working with passes that are intended to be used across both the iPhone and Apple Watch.                                          | Call it when you need to check the status of the Apple Watch pairing. | `nil`
 
 **Delegate Callbacks:**
 
+    func AlertWalletUIViewController(_ controller: AlertWalletController, isWatchPaired result: Bool)
 
-| ** Method**                          | **Description**                                             | **Parameters**                                    |
+| **Callback Method**                                | **Description**                                                      | **Parameters**                                |
+|----------------------------------------------------|----------------------------------------------------------------------|-----------------------------------------------|
+| `onEligibilityResult`    | Once the eligibility check is complete, the SDK will typically notify your app via a delegate method or a callback. This allows you to handle the result appropriately.    | `_ controller: isWatchPaired` |
+
+
+### `saveToWallet`
+Here's how you might use it in your code:
+
+```swift
+AlertWalletController.shared.saveToWallet(parentViewController: UIViewController, credential: ProvisioningCredential, previewImage: UIImage?)
+```
+
+### Parameters
+
+- **parentViewController (`UIViewController`)**: The view controller that will present any necessary UI components or dialogs during the process of adding the pass to Apple Wallet.
+
+- **credential (`ProvisioningCredential`)**: The credential object that contains all necessary details for the pass, including identifiers and metadata required for provisioning.
+
+- **previewImage (`UIImage?`)**: An optional image to be shown as a preview for the pass. This can enhance user experience by displaying a visual representation of the pass during the addition process.
+
+
+| **Method**               | **Description**                                                                                     | **Parameters**         |
+|--------------------------|-----------------------------------------------------------------------------------------------------|---------------------|
+| `saveToWallet(_:)`     | Simulates the process of adding a pass to Apple Wallet. This method is a placeholder.              |  `parentViewController: UIViewController`, `credential: ProvisioningCredential`, `previewImage: UIImage?` |
+
+**Delegate Callbacks:**
+
+To handle the results of the `saveToWallet` operation, implement the following delegate methods in your `AlertWalletControllerDelegate`:
+
+
+```swift
+func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningSuccess success: String)
+```
+```swift
+func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningError error: String)
+```
+
+| **Method**                          | **Description**                                             | **Parameters**                                    |
 |----------------------------------------------|-------------------------------------------------------------|---------------------------------------------------|
-| `walletprovisioningSuccess` | Called when a pass is successfully provisioned.            | `controller: AlertWalletController`, `walletProvisioningSuccess success: String`  |
-| `walletprovisioningError`   | Called when an error occurs during pass provisioning.       | `controller: AlertWalletController`, `walletProvisioningError error: String` |
+| `onWalletProvisioningSuccess` | Called when a pass is successfully provisioned.            | `controller: AlertWalletController`, `onWalletProvisioningSuccess success: String`  |
+| `onWalletProvisioningError`   | Called when an error occurs during pass provisioning.       | `controller: AlertWalletController`, `onWalletProvisioningError error: String` |
+
+### `getDevicePasses`
+Here's how you might use it in your code:
+
+```swift
+AlertWalletController.shared.getDevicePasses()
+```
+
+| **Method**               | **Description**                                                                                     | **Returns**         |
+|--------------------------|-----------------------------------------------------------------------------------------------------|---------------------|
+| `getDevicePasses()`     | Retrieves a list of passes stored locally on the device. These are physical passes that have been added to Apple Wallet and are accessible directly from the device.              |  `[PKPass]`|
+
+### `getRemotePasses`
+Here's how you might use it in your code:
+
+```swift
+AlertWalletController.shared.getRemotePasses()
+```
+
+| **Method**               | **Description**                                                                                     | **Returns**         |
+|--------------------------|-----------------------------------------------------------------------------------------------------|---------------------|
+| `getRemotePasses()`     | Retrieves a list of of remote passes that are stored on a paired device, such as an Apple Watch. .              |  `[PKSecureElementPass]`|
+
+Here's a summary document for the data structures used in provisioning passes:
+
+---
+
+# Summary of Data Structures
+
+## ProvisioningRequestPayload
+
+**Purpose**: Represents the payload needed to request provisioning of a pass. This structure contains the user and badge identifiers required for the provisioning process.
+
+### Properties
+
+- **userId** (`String`): Unique identifier for the user requesting the pass.
+- **badgeId** (`String`): Unique identifier for the badge associated with the pass.
+
+### Initializers
+
+- **`init()`**: Creates an instance with `userId` and `badgeId` set to empty strings.
+- **`init(userId:badgeId:)`**: Creates an instance with specified `userId` and `badgeId`.
+
+### Example Usage
+
+```swift
+let payload = ProvisioningRequestPayload(userId: "12345", badgeId: "67890")
+```
+
+---
+
+## ProvisioningCredential
+
+**Purpose**: Represents the credential obtained after a successful provisioning request. This structure includes detailed provisioning information.
+
+### Properties
+
+- **provisioningInformation** (`ProvisioningInformation`): Contains detailed information about the provisioning process.
+
+### Initializers
+
+- **`init()`**: Creates an instance with an empty `ProvisioningInformation`.
+- **`init(provisioningInformation:)`**: Creates an instance with a specified `ProvisioningInformation`.
+
+### Example Usage
+
+```swift
+let info = ProvisioningInformation(provisioningCredentialIdentifier: "ABC123",
+                                   sharingInstanceIdentifier: "XYZ789",
+                                   cardTemplateIdentifier: "Template1",
+                                   environmentIdentifier: "Env1",
+                                   accountHash: "HashValue",
+                                   relyingPartyIdentifier: "RelyingParty")
+let credential = ProvisioningCredential(provisioningInformation: info)
+```
+
+---
+
+## ProvisioningInformation
+
+**Purpose**: Contains detailed information about the pass being provisioned. This structure provides identifiers and additional details related to the pass.
+
+### Properties
+
+- **provisioningCredentialIdentifier** (`String`): Identifier for the provisioning credential.
+- **sharingInstanceIdentifier** (`String`): Identifier for the sharing instance.
+- **cardTemplateIdentifier** (`String`): Identifier for the card template used.
+- **environmentIdentifier** (`String?`): Optional identifier for the environment.
+- **accountHash** (`String?`): Optional hash for the account.
+- **relyingPartyIdentifier** (`String?`): Optional identifier for the relying party.
+
+### Initializers
+
+- **`init()`**: Creates an instance with empty strings for required properties and `nil` for optional properties.
+- **`init(provisioningCredentialIdentifier:sharingInstanceIdentifier:cardTemplateIdentifier:environmentIdentifier:accountHash:relyingPartyIdentifier:)`**: Creates an instance with specified values for all properties.
+
+### Example Usage
+
+```swift
+let info = ProvisioningInformation(provisioningCredentialIdentifier: "ABC123",
+                                   sharingInstanceIdentifier: "XYZ789",
+                                   cardTemplateIdentifier: "Template1",
+                                   environmentIdentifier: "Env1",
+                                   accountHash: "HashValue",
+                                   relyingPartyIdentifier: "RelyingParty")
+```
+
+---
+
+This document provides an overview of the data structures used for pass provisioning, including `ProvisioningRequestPayload`, `ProvisioningCredential`, and `ProvisioningInformation`. Each structure has properties and initializers to facilitate the creation and handling of provisioning requests and credentials.
 
 ## License
 **copyright reserved Alertenterprise**
