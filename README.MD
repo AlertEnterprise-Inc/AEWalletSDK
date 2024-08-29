@@ -5,6 +5,7 @@
 ## Table of Contents
 
 - [Features](#features)
+- [Onboarding](#onboarding)
 - [Installation](#installation)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
@@ -17,6 +18,93 @@
 - **Pass Retrieval**: Retrieve and query existing passes in the Wallet.
 - **Customizable Passes**: Support for custom pass designs and metadata.
 - **Delegates and Callbacks**: Handle pass-related events and updates with delegate callbacks.
+
+## Onboarding
+
+To enable your app to provision and add a pass to Apple Wallet, follow these steps:
+
+## Entitlements for Pass Provisioning
+
+To enable your iOS app to provision and add passes to Apple Wallet, you must configure the appropriate entitlement. This section describes the steps required to request and implement the entitlement needed for pass provisioning.
+
+### Overview
+
+An entitlement grants your app the necessary rights to use certain features or technologies on iOS devices. For pass provisioning to Apple Wallet, your app requires the `com.apple.developer.contactless-payment-pass-provisioning` entitlement with the value `["shareablecredential"]`.
+
+### Steps to Configure the Entitlement
+
+#### Step 1: Request the Entitlement
+
+To provision passes from within your app, you need to request the following entitlement:
+
+- **Entitlement Key:** `com.apple.developer.contactless-payment-pass-provisioning`
+- **Entitlement Value:** `["shareablecredential"]`
+
+To request this entitlement:
+1. Email **applepayentitlements@apple.com** with the following information:
+   - **Proposed Use Cases:** Describe how you plan to use pass provisioning.
+   - **Business Location:** State the country where your business is headquartered.
+   - **Organization Name**
+   - **App Name**
+   - **Team ID:** Your Apple Developer account Team ID.
+   - **App ID:** Your App Store ID.
+
+You will receive an email confirmation once your entitlement request is processed.
+
+#### Step 2: Create a Provisioning Profile
+
+After receiving the entitlement, you need to include it in a provisioning profile. Follow these steps:
+
+1. **Sign in** to [Apple Developer Account](https://developer.apple.com/account).
+
+2. **Create a New Identifier:**
+   - Go to **Identifiers**.
+   - Select **+** next to **Identifiers**.
+   - Choose **App IDs** > **App** or **App IDs** > **App Clip**.
+   - On the Register an App ID page:
+     - Enter a description.
+     - Select the appropriate **Bundle ID** type.
+     - Under **Additional Capabilities**, select **Contactless Pass Provisioning (SharableCredential)**.
+     - Click **Register**.
+
+3. **Create a Provisioning Profile:**
+   - Go to **Certificates, IDs & Profiles**.
+   - Select **Profiles** and then **+** next to **Profile**.
+   - Choose **iOS App Development**.
+   - On the **Generate a Provisioning Profile** page:
+     - Select the new **App ID** you created.
+     - Choose the appropriate **Certificates** and **Devices**.
+     - For **Entitlements**, select **Default** to include the entitlement automatically.
+     - Enter a profile name and click **Generate**.
+   - **Download** the Provisioning Profile.
+
+4. **Add the Provisioning Profile to Xcode:**
+   - Open your Xcode project.
+   - Go to **Signing & Capabilities** in the project editor.
+   - Ensure **Automatically manage signing** is unchecked.
+   - Select or import the downloaded provisioning profile.
+
+#### Step 3: Add the Entitlement to the Entitlements plist
+
+Once the provisioning profile is set up, add the entitlement to your app’s Entitlements plist:
+
+1. **Edit the Entitlements plist File Directly:**
+   - Add the following key-value pair to the file:
+
+   ```xml
+   <key>com.apple.developer.contactless-payment-pass-provisioning</key>
+   <array>
+       <string>shareablecredential</string>
+   </array>
+   ```
+
+2. **Edit the Entitlements plist in Xcode:**
+   - Open the Entitlements file in Xcode.
+   - Update it to include the entitlement key and value.
+
+By following these steps, you will configure your app to support pass provisioning to Apple Wallet, enabling users to seamlessly add and manage their passes.
+
+
 
 ## Installation
 
@@ -128,18 +216,18 @@ This method is called if an error occurs while provisioning the pass to Apple Wa
 **Function Signature:**
 
 ```swift
-func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningError error: String)
+func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningError error: WalletProvisioningResponse)
 ```
 
 **Parameters:**
 
 - **controller (`AlertWalletController`)**: The instance of `AlertWalletController` that invoked the callback.
-- **error (`String`)**: A description of the error that occurred during provisioning.
+- **error (`WalletProvisioningResponse`)**:  An instance of WalletProvisioningResponse containing error details.
 
 **Example Implementation:**
 
 ```swift
-func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningError error: String) {
+func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningError error: WalletProvisioningResponse) {
     Self.logger.debug("walletProvisioningError ::  \(error)" )
     // Handle the error (e.g., show an alert to the user)
 }
@@ -157,18 +245,18 @@ This method is called when the pass is successfully provisioned to Apple Wallet.
 **Function Signature:**
 
 ```swift
-func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningSuccess success: String)
+func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningSuccess success: WalletProvisioningResponse)
 ```
 
 **Parameters:**
 
 - **controller (`AlertWalletController`)**: The instance of `AlertWalletController` that invoked the callback.
-- **success (`String`)**: A success message or identifier confirming that the pass was added to the Wallet.
+- **success (`WalletProvisioningResponse`)**: An instance of WalletProvisioningResponse containing success details.
 
 **Example Implementation:**
 
 ```swift
-func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningSuccess success: String) {
+func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningSuccess success: WalletProvisioningResponse) {
     Self.logger.debug("walletProvisioningSuccess ::  \(success)" )
     self.viewmodel.showProgressView = false
     self.viewmodel.stateModel.cards[self.viewmodel.activeCard].showAddtoWalletButton = false
@@ -292,16 +380,16 @@ To handle the results of the `saveToWallet` operation, implement the following d
 
 
 ```swift
-func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningSuccess success: String)
+func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningSuccess success: WalletProvisioningResponse)
 ```
 ```swift
-func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningError error: String)
+func AlertWalletUIViewController(_ controller: AlertWalletController, onWalletProvisioningError error: WalletProvisioningResponse)
 ```
 
 | **Method**                          | **Description**                                             | **Parameters**                                    |
 |----------------------------------------------|-------------------------------------------------------------|---------------------------------------------------|
-| `onWalletProvisioningSuccess` | Called when a pass is successfully provisioned.            | `controller: AlertWalletController`, `onWalletProvisioningSuccess success: String`  |
-| `onWalletProvisioningError`   | Called when an error occurs during pass provisioning.       | `controller: AlertWalletController`, `onWalletProvisioningError error: String` |
+| `onWalletProvisioningSuccess` | Called when a pass is successfully provisioned.            | `controller: AlertWalletController`, `onWalletProvisioningSuccess success: WalletProvisioningResponse`  |
+| `onWalletProvisioningError`   | Called when an error occurs during pass provisioning.       | `controller: AlertWalletController`, `onWalletProvisioningError error: WalletProvisioningResponse` |
 
 ### `getDevicePasses`
 Here's how you might use it in your code:
@@ -331,7 +419,7 @@ Here's a summary document for the data structures used in provisioning passes:
 
 # Summary of Data Structures
 
-## ProvisioningRequestPayload
+## `ProvisioningRequestPayload` Data Structure
 
 **Purpose**: Represents the payload needed to request provisioning of a pass. This structure contains the user and badge identifiers required for the provisioning process.
 
@@ -353,7 +441,7 @@ let payload = ProvisioningRequestPayload(userId: "12345", badgeId: "67890")
 
 ---
 
-## ProvisioningCredential
+## `ProvisioningCredential` Data Structure
 
 **Purpose**: Represents the credential obtained after a successful provisioning request. This structure includes detailed provisioning information.
 
@@ -380,7 +468,7 @@ let credential = ProvisioningCredential(provisioningInformation: info)
 
 ---
 
-## ProvisioningInformation
+## `ProvisioningInformation` Data Structure
 
 **Purpose**: Contains detailed information about the pass being provisioned. This structure provides identifiers and additional details related to the pass.
 
@@ -408,6 +496,70 @@ let info = ProvisioningInformation(provisioningCredentialIdentifier: "ABC123",
                                    accountHash: "HashValue",
                                    relyingPartyIdentifier: "RelyingParty")
 ```
+
+## `WalletProvisioningResponse` Data Structure
+
+**Purpose**: Represents the response received from the wallet provisioning process, including success status, pass URL, and additional information.
+
+### Properties
+
+- **success** (`Bool`): Indicates whether the provisioning process was successful.
+- **passUrl** (`URL?`): URL to view the pass in Wallet, if successful.
+- **message** (`String?`): Message providing details about the provisioning result (success or error).
+- **pass** (`PassInformation`): Detailed information about the pass.
+
+### Initializers
+
+- **`init()`**: Creates an instance with default values:
+  - `success` set to `false`.
+  - `passUrl` and `message` set to `nil`.
+  - `pass` set to an empty `PassInformation` instance.
+
+- **`init(message: String)`**: Creates an instance with a message indicating an error:
+  - `success` set to `false`.
+  - `passUrl` set to `nil`.
+  - `message` set to the provided error message.
+  - `pass` set to an empty `PassInformation` instance.
+
+- **`init(success: Bool, passUrl: URL?, message: String, pass: PassInformation)`**: Creates an instance with specified values for all properties.
+
+### Example Usage
+
+```swift
+let successResponse = WalletProvisioningResponse(success: true,
+                                                 passUrl: URL(string: "https://example.com/pass"),
+                                                 message: "Provisioning successful",
+                                                 pass: PassInformation(/* initialize with actual values */))
+```
+
+## `PassInformation` Data Structure
+
+**Purpose**: Contains details about the pass being provisioned.
+
+### Properties
+
+- **passType** (`Int?`): An optional integer representing the type of the pass.
+- **passTypeIdentifier** (`String?`): An optional string identifier for the type of pass.
+- **webServiceURL** (`URL?`): An optional URL for the web service related to the pass.
+
+### Initializers
+
+- **`init()`**: Creates an instance with default values:
+  - `passType`, `passTypeIdentifier`, and `webServiceURL` set to `nil`.
+
+- **`init(passType: Int?, passTypeIdentifier: String?, webServiceURL: URL?)`**: Creates an instance with specified values:
+  - `passType` set to the provided integer value.
+  - `passTypeIdentifier` set to the provided string.
+  - `webServiceURL` set to the provided URL.
+
+### Example Usage
+
+```swift
+let passInfo = PassInformation(passType: 1,
+                                passTypeIdentifier: "com.example.pass",
+                                webServiceURL: URL(string: "https://example.com/service"))
+```
+
 
 ---
 
