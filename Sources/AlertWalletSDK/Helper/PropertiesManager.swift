@@ -87,10 +87,10 @@ public class PropertiesManager {
         }
         return -1
     }
-    public func setAppleWalletViewDismissTimeout(appleWalletViewDismissTimeout: String) {
-        defaults.setValue(appleWalletViewDismissTimeout, forKey: appleWalletViewDismissTimeout)
+    public func setAppleWalletUITimeout(timout: String) {
+        defaults.setValue(timout, forKey: appleWalletViewDismissTimeout)
     }
-    public func clearAppleWalletViewDismissTimeout() -> Void {
+    public func clearAppleWalletUITimeout() -> Void {
         UserDefaults.standard.removeObject(forKey: appleWalletViewDismissTimeout)
     }
 
@@ -100,7 +100,7 @@ public class PropertiesManager {
         clearOwnerName()
         clearEnvironmentIdentifier()
         clearPassDescription()
-        clearAppleWalletViewDismissTimeout()
+        clearAppleWalletUITimeout()
     }
 
 }
