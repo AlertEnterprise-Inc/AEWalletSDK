@@ -19,6 +19,7 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
 
     static let shared = ProvisioningHelper()
     public weak var delegate: AlertWalletControllerDelegate?
+    public var isDismissed: Bool = false
     public func initiateWalletProvisioning(with provisioningResponse: ProvisioningCredential , viewController: UIViewController , delegate: AlertWalletControllerDelegate?, previewImage: UIImage){
         Self.logger.info("ProvisioningHelper initiateWalletProvisioning Begin")
         var provisioningInfo = provisioningResponse.provisioningInformation
@@ -30,6 +31,7 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
         let ownerDisplayName = PropertiesManager.shared.getOwnerName() ?? "Johnny"
         let localizedDescription = PropertiesManager.shared.getPassDescription() ?? "Pass"
         self.delegate = delegate
+        self.isDismissed = false
 
         let preview = PKShareablePassMetadata.Preview(
             passThumbnail: previewImage.cgImage!,
@@ -59,6 +61,12 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
             }
             guard let vc = self.createSEViewController(for: config) else { return }
             viewController.present(vc, animated: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 20) {
+                if(!self.isDismissed){
+                    vc.dismiss(animated: true,completion: nil)
+                }
+            }
+
         }
     }
 
@@ -87,6 +95,7 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
                 pass: PassInformation(passType: passes?.first?.passType.hashValue ,passTypeIdentifier: passes?.first?.passTypeIdentifier , webServiceURL: passes?.first?.webServiceURL)))
         }
         controller.dismiss(animated: true)
+        self.isDismissed = true
     }
 
 
