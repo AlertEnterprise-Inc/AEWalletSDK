@@ -16,6 +16,7 @@ public class PropertiesManager {
     private let environmentIdentifierKey = "alert-sdk-cardTemplate-identifier"
     private let ownerNameKey = "alert-sdk-pass-owner-name"
     private let passDescriptionKey = "alert-sdk-pass-preview-description"
+    private let appleWalletViewDismissTimeout = "alert-sdk-wallet-time-out"
 
     private let defaults = UserDefaults.standard
 
@@ -79,12 +80,27 @@ public class PropertiesManager {
     public func clearPassDescription() -> Void {
         UserDefaults.standard.removeObject(forKey: passDescriptionKey)
     }
+
+    public func getAppleWalletUITimeout() -> Int {
+        if let passDescription = defaults.string(forKey: appleWalletViewDismissTimeout) {
+            return Int(passDescription)!
+        }
+        return -1
+    }
+    public func setAppleWalletViewDismissTimeout(appleWalletViewDismissTimeout: String) {
+        defaults.setValue(appleWalletViewDismissTimeout, forKey: appleWalletViewDismissTimeout)
+    }
+    public func clearAppleWalletViewDismissTimeout() -> Void {
+        UserDefaults.standard.removeObject(forKey: appleWalletViewDismissTimeout)
+    }
+
     public func clearAll() -> Void {
         clearAccessToken()
         clearServerURL()
         clearOwnerName()
         clearEnvironmentIdentifier()
         clearPassDescription()
+        clearAppleWalletViewDismissTimeout()
     }
 
 }

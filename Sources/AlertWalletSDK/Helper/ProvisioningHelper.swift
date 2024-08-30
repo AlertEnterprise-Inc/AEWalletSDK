@@ -61,9 +61,14 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
             }
             guard let vc = self.createSEViewController(for: config) else { return }
             viewController.present(vc, animated: true)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 20) {
-                if(!self.isDismissed){
-                    vc.dismiss(animated: true,completion: nil)
+
+            if(PropertiesManager.shared.getAppleWalletUITimeout() > 0){
+                let timeout : TimeInterval = TimeInterval(PropertiesManager.shared.getAppleWalletUITimeout())
+                DispatchQueue.main.asyncAfter(deadline: .now() + timeout) {
+                    if(!self.isDismissed){
+                        self.isDismissed = true;
+                        vc.dismiss(animated: true,completion: nil)
+                    }
                 }
             }
 
@@ -89,13 +94,15 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
         }
         if (passes != nil ) {
             delegate?.AlertWalletUIViewController(AlertWalletController.shared, onWalletProvisioningSuccess: WalletProvisioningResponse(
-                success: true, 
+                success: true,
                 passUrl: passes?.first?.passURL,
                 message: "Pass Added Successfully",
                 pass: PassInformation(passType: passes?.first?.passType.hashValue ,passTypeIdentifier: passes?.first?.passTypeIdentifier , webServiceURL: passes?.first?.webServiceURL)))
         }
-        controller.dismiss(animated: true)
-        self.isDismissed = true
+        if(!self.isDismissed){
+            self.isDismissed = true;
+            controller.dismiss(animated: true)
+        }
     }
 
 
