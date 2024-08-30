@@ -60,18 +60,18 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
                 return
             }
             guard let vc = self.createSEViewController(for: config) else { return }
-            viewController.present(vc, animated: true)
-
             if(PropertiesManager.shared.getAppleWalletUITimeout() > 0){
                 let timeout : TimeInterval = TimeInterval(PropertiesManager.shared.getAppleWalletUITimeout())
                 DispatchQueue.main.asyncAfter(deadline: .now() + timeout) {
                     if(!self.isDismissed){
                         self.isDismissed = true;
-                        vc.dismiss(animated: true,completion: nil)
+                        if(vc.isViewLoaded){
+                            vc.dismiss(animated: true,completion: nil)
+                        }
                     }
                 }
             }
-
+            viewController.present(vc, animated: true)
         }
     }
 
