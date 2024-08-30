@@ -32,6 +32,7 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
         let localizedDescription = PropertiesManager.shared.getPassDescription() ?? "Pass"
         self.delegate = delegate
         self.isDismissed = false
+        let appleUITimeout = PropertiesManager.shared.getAppleWalletUITimeout()
 
         let preview = PKShareablePassMetadata.Preview(
             passThumbnail: previewImage.cgImage!,
@@ -60,13 +61,14 @@ class ProvisioningHelper: NSObject,PKAddSecureElementPassViewControllerDelegate{
                 return
             }
             guard let vc = self.createSEViewController(for: config) else { return }
-            if(PropertiesManager.shared.getAppleWalletUITimeout() > 0){
-                let timeout : TimeInterval = TimeInterval(PropertiesManager.shared.getAppleWalletUITimeout())
+            if(appleUITimeout > 0){
+                let timeout : TimeInterval = TimeInterval(appleUITimeout)
                 DispatchQueue.main.asyncAfter(deadline: .now() + timeout) {
                     if(!self.isDismissed){
                         self.isDismissed = true;
                         if(vc.isViewLoaded){
                             vc.dismiss(animated: true,completion: nil)
+                            delegate?.AlertWalletUIViewController(AlertWalletController.shared, onWalletProvisioningError: WalletProvisioningResponse(message: "TIMEOUT , as per configuration it is  \(appleUITimeout) seconds")   )
                         }
                     }
                 }
