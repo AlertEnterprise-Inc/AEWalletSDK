@@ -50,6 +50,7 @@ final class AppleWatchDetector: NSObject , WCSessionDelegate {
         }
     }
     public func initialize() {
+        checkIfWatchIsPaired()
         NSLog("watch detect");
     }
     
