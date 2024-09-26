@@ -14,6 +14,7 @@ final class AppleWatchDetector: NSObject , WCSessionDelegate {
     
     private override init() {
         super.init()
+        NSLog("watch init");
         if WCSession.isSupported() {
             WCSession.default.delegate = self
             WCSession.default.activate()
@@ -49,6 +50,7 @@ final class AppleWatchDetector: NSObject , WCSessionDelegate {
         }
     }
     public func initialize() {
+        NSLog("watch detect");
     }
     
 }
