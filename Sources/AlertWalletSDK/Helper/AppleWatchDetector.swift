@@ -8,14 +8,14 @@
 import WatchConnectivity
 import os
 
-final class AppleWatchDetector: NSObject {
+final class SDKWatchDetector: NSObject {
 
     private static let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
-        category: String(describing: AppleWatchDetector.self)
+        category: String(describing: SDKWatchDetector.self)
     )
 
-    static let shared = AppleWatchDetector()
+    static let shared = SDKWatchDetector()
     var session: WCSession?  = nil
     var watchPaired = false
     public weak var delegate: AlertWalletControllerDelegate?
@@ -31,9 +31,10 @@ final class AppleWatchDetector: NSObject {
     }
 }
 
-extension AppleWatchDetector: WCSessionDelegate {
+extension SDKWatchDetector: WCSessionDelegate {
 
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        NSLog("-------From SDK Watch Detector")
         self.watchPaired = session.isPaired
     }
 
