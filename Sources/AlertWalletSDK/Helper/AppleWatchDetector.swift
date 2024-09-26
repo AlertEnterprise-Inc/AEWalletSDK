@@ -13,13 +13,23 @@ final class AppleWatchDetector: NSObject{
     private var session : WCSession? = nil
     
     private override init() {
-        super.init()
-        NSLog("watch init");
-        if WCSession.isSupported() {
-            WCSession.default.delegate = self
-            WCSession.default.activate()
+//        super.init()
+//        NSLog("watch init");
+//        if WCSession.isSupported() {
+//            WCSession.default.delegate = self
+//            WCSession.default.activate()
+//        }else{
+//            self.session = nil
+//        }
+    }
+    
+    func detect() {
+        if(WCSession.isSupported()){
+            session = WCSession.default
+            session?.delegate = self
+            session?.activate()
         }else{
-            self.session = nil
+            NSLog("AppleWatchDetector :: detect()  WCSession.isSupported()   is false  " )
         }
     }
     
@@ -50,6 +60,7 @@ final class AppleWatchDetector: NSObject{
     }
     public func initialize() {
 //        checkIfWatchIsPaired()
+        detect()
         NSLog("watch detect");
     }
     
