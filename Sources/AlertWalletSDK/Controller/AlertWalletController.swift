@@ -65,13 +65,13 @@ public class AlertWalletController: UIViewController {
     /** response will be delegated to IsWatched function*/
     public func isWatchPaired() {
         Self.logger.info("AlertWalletController isWatchPaired Begin")
-        SDKWatchDetector.shared.delegate =  delegate
-        SDKWatchDetector.shared.detect()
+        AppleWatchDetector.shared.delegate =  delegate
+        AppleWatchDetector.shared.initialize()
     }
     public func checkIfWatchPaired() {
         Self.logger.info("AlertWalletController checkIfWatchPaired Begin")
-        SDKWatchDetector.shared.delegate =  delegate
-        SDKWatchDetector.shared.detect()
+        AppleWatchDetector.shared.delegate =  delegate
+        AppleWatchDetector.shared.checkIfWatchIsPaired()
     }
 
     public func startPassProvisioning(userId: String, badgeId: String){

@@ -1,50 +1,55 @@
 //
 //  AppleWatchDetector.swift
-//  AEWallet
 //
-//  Created by aksh gaur on 01/11/23.
+//
+//  Created by Reddy on 22/08/24.
 //
 
 import WatchConnectivity
-import os
-
-final class SDKWatchDetector: NSObject {
-
-    private static let logger = Logger(
-        subsystem: Bundle.main.bundleIdentifier!,
-        category: String(describing: SDKWatchDetector.self)
-    )
-
-    static let shared = SDKWatchDetector()
-    var session: WCSession?  = nil
-    var watchPaired = false
+final class AppleWatchDetector: NSObject , WCSessionDelegate {
+    
+    public static let shared = AppleWatchDetector()
     public weak var delegate: AlertWalletControllerDelegate?
-
-    func detect() {
-        if(WCSession.isSupported()){
-            session = WCSession.default
-            session?.delegate = self
-            session?.activate()
+    private var session : WCSession? = nil
+    
+    private override init() {
+        super.init()
+        if WCSession.isSupported() {
+            WCSession.default.delegate = self
+            WCSession.default.activate()
         }else{
-            Self.logger.error("AppleWatchDetector :: detect()  WCSession.isSupported()   is false  " )
+            self.session = nil
         }
     }
-}
-
-extension SDKWatchDetector: WCSessionDelegate {
-
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        NSLog("-------From SDK Watch Detector")
-        self.watchPaired = session.isPaired
+    
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {
+        self.session = session
+        let isPaired  = self.session!.isPaired
+        delegate?.AlertWalletUIViewController(AlertWalletController.shared, isWatchPaired: isPaired)
     }
-
-    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
-        Self.logger.debug("AppleWatchDetector :: session  Received application context: \(applicationContext)  " )
-    }
-
-    func sessionDidDeactivate(_ session: WCSession) {
-    }
-
+    
     func sessionDidBecomeInactive(_ session: WCSession) {
     }
+    
+    func sessionDidDeactivate(_ session: WCSession) {
+        WCSession.default.activate()
+    }
+    
+    public func checkIfWatchIsPaired() {
+        if(self.session != nil){
+            let isPaired = self.session!.isPaired
+            delegate?.AlertWalletUIViewController(AlertWalletController.shared, isWatchPaired: isPaired)
+        }else if(self.session == nil){
+            if WCSession.isSupported() {
+                let isPaired = WCSession.default.isPaired
+                delegate?.AlertWalletUIViewController(AlertWalletController.shared, isWatchPaired: isPaired)
+            }
+        }else{
+            delegate?.AlertWalletUIViewController(AlertWalletController.shared, isWatchPaired: false)
+        }
+    }
+    public func initialize() {
+    }
+    
 }
+
