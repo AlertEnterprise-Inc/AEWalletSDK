@@ -6,7 +6,7 @@
 //
 
 import WatchConnectivity
-final class AppleWatchDetector: NSObject , WCSessionDelegate {
+final class AppleWatchDetector: NSObject{
     
     public static let shared = AppleWatchDetector()
     public weak var delegate: AlertWalletControllerDelegate?
@@ -23,18 +23,17 @@ final class AppleWatchDetector: NSObject , WCSessionDelegate {
         }
     }
     
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {
-        self.session = session
-        let isPaired  = self.session!.isPaired
-        delegate?.AlertWalletUIViewController(AlertWalletController.shared, isWatchPaired: isPaired)
-    }
+//    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {
+//        self.session = session
+//        let isPaired  = self.session!.isPaired
+//    }
     
-    func sessionDidBecomeInactive(_ session: WCSession) {
-    }
-    
-    func sessionDidDeactivate(_ session: WCSession) {
-        WCSession.default.activate()
-    }
+//    func sessionDidBecomeInactive(_ session: WCSession) {
+//    }
+//    
+//    func sessionDidDeactivate(_ session: WCSession) {
+//        WCSession.default.activate()
+//    }
     
     public func checkIfWatchIsPaired() {
         if(self.session != nil){
@@ -54,5 +53,25 @@ final class AppleWatchDetector: NSObject , WCSessionDelegate {
         NSLog("watch detect");
     }
     
+}
+
+extension AppleWatchDetector: WCSessionDelegate {
+
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+//        self.watchPaired = session.isPaired
+        self.session = session
+        let isPaired  = self.session!.isPaired
+        delegate?.AlertWalletUIViewController(AlertWalletController.shared, isWatchPaired: isPaired)
+    }
+
+    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
+        NSLog("AppleWatchDetector :: session  Received application context: \(applicationContext)  " )
+    }
+
+    func sessionDidDeactivate(_ session: WCSession) {
+    }
+
+    func sessionDidBecomeInactive(_ session: WCSession) {
+    }
 }
 
