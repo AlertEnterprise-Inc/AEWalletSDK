@@ -16,7 +16,7 @@ final class AppleWatchDetector: NSObject , WCSessionDelegate {
         super.init()
         NSLog("watch init");
         if WCSession.isSupported() {
-            WCSession.default.delegate = AppleWatchDetector.shared
+            WCSession.default.delegate = self
             WCSession.default.activate()
         }else{
             self.session = nil
